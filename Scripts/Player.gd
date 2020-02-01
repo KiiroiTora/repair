@@ -58,7 +58,7 @@ func slice():
 func throw():
 	print("throwing")
 	var axe = throwing_axe_scene.instance()
-	axe.global_position = self.global_position
-	axe.velocity = (get_global_mouse_position() - self.global_position).normalized()
+	axe.global_position = $Position2D/Position2D.global_position
+	axe.velocity = ($Position2D/Position2D.global_position - $Position2D.global_position).normalized()
 	get_parent().add_child(axe)
 	pass
