@@ -58,9 +58,9 @@ func _process(delta):
 	
 	throw_time = clamp(throw_time + delta, 0, max_throw_duration) if Input.is_action_pressed("throw" + pid) and (has_axe_l or has_axe_r) else 0
 	
-	$particles_throw.emitting = throw_time != 0
-	$particles_throw.speed_scale = 1 + throw_strength.interpolate(throw_time) * 4
-	
+	$particles_throw.emitting = throw_time > 0.25
+	$particles_throw.speed_scale = 1 + throw_strength.interpolate(throw_time/max_throw_duration) * 8
+	$shadow.position.y = 137.669 if limbs.has("LL") or limbs.has("RL") else 60
 	body.scale.x = abs(body.scale.x) if controller_dir().x > 0 else (- abs(body.scale.x) if controller_dir().x < 0 else body.scale.x)
 	
 	anim.play(("idle" if velocity.length() == 0 else "walk") if !(Input.is_action_pressed("throw" + pid) and (has_axe_l or has_axe_r)) else "swing"+("l" if has_axe_l else "r"))
@@ -164,9 +164,3 @@ func _on_area_pickup_area_entered(area):
 				if limbs.has("LH") and !has_axe_l:
 					has_axe_l = true
 					obj.queue_free()
-			
-					
-					
-				
-		
-	pass # Replace with function body.
