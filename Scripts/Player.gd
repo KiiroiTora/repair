@@ -56,7 +56,7 @@ func slice():
 	get_parent().add_child(fl_obj)
 
 func throw():
-	print("Throwing")
+	print("throwing")
 	var axe = throwing_axe_scene.instance()
 	axe.global_position = self.global_position
 	axe.velocity = (get_global_mouse_position() - self.global_position).normalized()

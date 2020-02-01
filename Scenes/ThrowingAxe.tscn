@@ -4,10 +4,10 @@
 [ext_resource path="res://Images/Character V.1/Axe V.1.png" type="Texture" id=2]
 
 [sub_resource type="CircleShape2D" id=1]
-radius = 34.5987
+radius = 25.0635
 
 [sub_resource type="CircleShape2D" id=2]
-radius = 22.9169
+radius = 14.6116
 
 [node name="ThrowingAxe" type="KinematicBody2D"]
 script = ExtResource( 1 )
