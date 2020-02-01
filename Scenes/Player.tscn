@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=2]
+[gd_scene load_steps=18 format=2]
 
 [ext_resource path="res://Scripts/Player.gd" type="Script" id=1]
 [ext_resource path="res://Images/V.2/Player 1/Torso.png" type="Texture" id=2]
@@ -9,6 +9,7 @@
 [ext_resource path="res://Images/V.2/Player 1/Head.png" type="Texture" id=7]
 [ext_resource path="res://Images/V.2/Player 1/R_Leg.png" type="Texture" id=8]
 [ext_resource path="res://Sounds/Woosh-B11-www.fesliyanstudios.com.wav" type="AudioStream" id=9]
+[ext_resource path="res://Sounds/Guts-A2-www.fesliyanstudios.com.wav" type="AudioStream" id=10]
 
 [sub_resource type="Curve" id=1]
 _data = [ Vector2( 0, 0.172727 ), 0.0, 0.0, 0, 0, Vector2( 0.905455, 0.509091 ), 0.921052, 0.0, 0, 0, Vector2( 1, 1 ), 4.85294, 0.0, 0, 0 ]
@@ -380,7 +381,7 @@ tracks/13/keys = {
 "values": [ 0.0 ]
 }
 
-[sub_resource type="Animation" id=7]
+[sub_resource type="Animation" id=4]
 resource_name = "swingr"
 loop = true
 tracks/0/type = "value"
@@ -552,7 +553,7 @@ tracks/13/keys = {
 "values": [ 0.0 ]
 }
 
-[sub_resource type="Animation" id=4]
+[sub_resource type="Animation" id=5]
 loop = true
 step = 0.05
 tracks/0/type = "value"
@@ -748,11 +749,11 @@ tracks/15/keys = {
 "values": [ -42.6518, 0.0, 26.0872, 0.0 ]
 }
 
-[sub_resource type="CapsuleShape2D" id=5]
+[sub_resource type="CapsuleShape2D" id=6]
 radius = 24.3484
 height = 107.598
 
-[sub_resource type="CircleShape2D" id=6]
+[sub_resource type="CircleShape2D" id=7]
 radius = 102.919
 
 [node name="Player" type="KinematicBody2D"]
@@ -806,12 +807,12 @@ texture = ExtResource( 8 )
 autoplay = "idle"
 anims/idle = SubResource( 2 )
 anims/swingl = SubResource( 3 )
-anims/swingr = SubResource( 7 )
-anims/walk = SubResource( 4 )
+anims/swingr = SubResource( 4 )
+anims/walk = SubResource( 5 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2( 2.44348, 46.4268 )
-shape = SubResource( 5 )
+shape = SubResource( 6 )
 
 [node name="Position2D" type="Position2D" parent="."]
 position = Vector2( 2.44348, 46.4268 )
@@ -823,10 +824,13 @@ position = Vector2( 150, 0 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="area_pickup"]
 position = Vector2( 3.7825, 41.6076 )
-shape = SubResource( 6 )
+shape = SubResource( 7 )
 
 [node name="audio_throw" type="AudioStreamPlayer" parent="."]
 stream = ExtResource( 9 )
+
+[node name="audio_slice" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 10 )
 
 [node name="CPUParticles2D" type="CPUParticles2D" parent="."]
 [connection signal="area_entered" from="area_pickup" to="." method="_on_area_pickup_area_entered"]

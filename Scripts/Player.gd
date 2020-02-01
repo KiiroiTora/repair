@@ -74,8 +74,15 @@ func _process(delta):
 	$body/r_hand/axe.visible = has_axe_r
 		
 func slice():
+	if limbs.empty():
+		return
+	
 	var removed = limbs.pop_front()
 	var fl_obj = flying_object_scene.instance()
+	
+	$audio_slice.pitch_scale = rand_range(0.9, 1.1)
+	$audio_slice.play()
+	
 	
 	if (removed == "LH" and has_axe_l) or (removed == "RH" and has_axe_r):
 		var axe = flying_object_scene.instance()
