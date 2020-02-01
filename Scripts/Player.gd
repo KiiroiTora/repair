@@ -13,6 +13,7 @@ onready var l_leg := $body/l_leg
 onready var r_leg := $body/r_leg
 
 export var flying_object_scene = preload("res://Scenes/FlyingObject.tscn")
+export var throwing_axe_scene = preload("res://Scenes/ThrowingAxe.tscn")
 
 onready var body_parts := {
 	"H" : head,
@@ -39,7 +40,7 @@ func _process(delta):
 	
 	body.scale.x = abs(body.scale.x) if velocity.x > 0 else (- abs(body.scale.x) if velocity.x < 0 else body.scale.x)
 	
-	anim.play("idle" if velocity.x == 0 else "walk")
+	anim.play(("idle" if velocity.length() == 0 else "walk") if !Input.is_action_pressed("throw" + pid) else "swing")
 	
 	for b_part in body_parts.keys():
 		body_parts[b_part].visible = limbs.has(b_part)
@@ -50,3 +51,6 @@ func slice():
 	var fl_obj = flying_object_scene.instance()
 	fl_obj.get_node("Sprite").texture = body_parts[removed].texture
 	get_parent().add_child(fl_obj)
+
+func throw():
+	pass
