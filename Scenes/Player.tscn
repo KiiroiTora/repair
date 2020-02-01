@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=2]
+[gd_scene load_steps=21 format=2]
 
 [ext_resource path="res://Scripts/Player.gd" type="Script" id=1]
 [ext_resource path="res://Images/V.2/Player 1/Torso.png" type="Texture" id=2]
@@ -11,6 +11,7 @@
 [ext_resource path="res://Sounds/Woosh-B11-www.fesliyanstudios.com.wav" type="AudioStream" id=9]
 [ext_resource path="res://Sounds/Guts-A2-www.fesliyanstudios.com.wav" type="AudioStream" id=10]
 [ext_resource path="res://Images/fire_PNG6021.png" type="Texture" id=11]
+[ext_resource path="res://Images/Player Shadow.png" type="Texture" id=12]
 
 [sub_resource type="Curve" id=1]
 _data = [ Vector2( 0, 0.172727 ), 0.0, 0.0, 0, 0, Vector2( 0.905455, 0.509091 ), 0.921052, 0.0, 0, 0, Vector2( 1, 1 ), 4.85294, 0.0, 0, 0 ]
@@ -24,10 +25,10 @@ tracks/0/loop_wrap = true
 tracks/0/imported = false
 tracks/0/enabled = true
 tracks/0/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
+"times": PoolRealArray( 0, 0.3 ),
+"transitions": PoolRealArray( 1, 1 ),
 "update": 0,
-"values": [ Vector2( -22.5086, -13.6472 ) ]
+"values": [ Vector2( -22.5086, -13.6472 ), Vector2( -22.5087, -16.7984 ) ]
 }
 tracks/1/type = "value"
 tracks/1/path = NodePath("r_hand:rotation_degrees")
@@ -36,10 +37,10 @@ tracks/1/loop_wrap = true
 tracks/1/imported = false
 tracks/1/enabled = true
 tracks/1/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
+"times": PoolRealArray( 0, 0.3 ),
+"transitions": PoolRealArray( 1, 1 ),
 "update": 0,
-"values": [ 0.0 ]
+"values": [ 0.0, 0.0 ]
 }
 tracks/2/type = "value"
 tracks/2/path = NodePath("head:position")
@@ -48,10 +49,10 @@ tracks/2/loop_wrap = true
 tracks/2/imported = false
 tracks/2/enabled = true
 tracks/2/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
+"times": PoolRealArray( 0, 0.6 ),
+"transitions": PoolRealArray( 1, 1 ),
 "update": 0,
-"values": [ Vector2( 0, -39.8114 ) ]
+"values": [ Vector2( 0, -39.8114 ), Vector2( 0, -44.2232 ) ]
 }
 tracks/3/type = "value"
 tracks/3/path = NodePath("head:rotation_degrees")
@@ -60,10 +61,10 @@ tracks/3/loop_wrap = true
 tracks/3/imported = false
 tracks/3/enabled = true
 tracks/3/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
+"times": PoolRealArray( 0, 0.6 ),
+"transitions": PoolRealArray( 1, 1 ),
 "update": 0,
-"values": [ 0.0 ]
+"values": [ 0.0, 0.0 ]
 }
 tracks/4/type = "value"
 tracks/4/path = NodePath(".:position")
@@ -96,10 +97,10 @@ tracks/6/loop_wrap = true
 tracks/6/imported = false
 tracks/6/enabled = true
 tracks/6/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
+"times": PoolRealArray( 0, 0.3 ),
+"transitions": PoolRealArray( 1, 1 ),
 "update": 0,
-"values": [ Vector2( 18.2054, -11.851 ) ]
+"values": [ Vector2( 18.2054, -11.851 ), Vector2( 18.2054, -15.0022 ) ]
 }
 tracks/7/type = "value"
 tracks/7/path = NodePath("l_hand:rotation_degrees")
@@ -108,10 +109,10 @@ tracks/7/loop_wrap = true
 tracks/7/imported = false
 tracks/7/enabled = true
 tracks/7/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
+"times": PoolRealArray( 0, 0.3 ),
+"transitions": PoolRealArray( 1, 1 ),
 "update": 0,
-"values": [ 0.0 ]
+"values": [ 0.0, 0.0 ]
 }
 tracks/8/type = "value"
 tracks/8/path = NodePath("l_hand/axe:position")
@@ -771,11 +772,11 @@ position = Vector2( 0, 0.222222 )
 texture = ExtResource( 2 )
 
 [node name="head" type="Sprite" parent="body"]
-position = Vector2( 0, -39.8114 )
+position = Vector2( 0, -42.4192 )
 texture = ExtResource( 7 )
 
 [node name="l_hand" type="Sprite" parent="body"]
-position = Vector2( 18.2054, -11.851 )
+position = Vector2( 18.2054, -14.7562 )
 scale = Vector2( 1.06841, 1.06841 )
 z_index = -1
 texture = ExtResource( 3 )
@@ -787,7 +788,7 @@ rotation = -1.309
 texture = ExtResource( 4 )
 
 [node name="r_hand" type="Sprite" parent="body"]
-position = Vector2( -22.5086, -13.6472 )
+position = Vector2( -22.5087, -16.5524 )
 z_index = 2
 texture = ExtResource( 6 )
 offset = Vector2( -13.5824, 21.845 )
@@ -809,6 +810,7 @@ texture = ExtResource( 8 )
 
 [node name="anim_body" type="AnimationPlayer" parent="body"]
 autoplay = "idle"
+playback_speed = 2.0
 anims/idle = SubResource( 2 )
 anims/swingl = SubResource( 3 )
 anims/swingr = SubResource( 7 )
@@ -841,7 +843,7 @@ position = Vector2( 0, 114.845 )
 emitting = false
 amount = 100
 lifetime = 2.5
-preprocess = 50.0
+preprocess = 100.0
 speed_scale = 3.0
 texture = ExtResource( 11 )
 emission_shape = 2
@@ -851,4 +853,9 @@ angular_velocity = 720.0
 scale_amount = 0.05
 scale_amount_curve = SubResource( 8 )
 color = Color( 0.00784314, 0.580392, 0.419608, 0.752941 )
+
+[node name="shadow" type="Sprite" parent="."]
+position = Vector2( 3.783, 130 )
+z_index = -2
+texture = ExtResource( 12 )
 [connection signal="area_entered" from="area_pickup" to="." method="_on_area_pickup_area_entered"]
