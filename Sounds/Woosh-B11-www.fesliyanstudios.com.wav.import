@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/Woosh-B11-www.fesliyanstudios.com.wav-117ebc084e529d943da44c953bd0329d.sample"
+
+[deps]
+
+source_file="res://Sounds/Woosh-B11-www.fesliyanstudios.com.wav"
+dest_files=[ "res://.import/Woosh-B11-www.fesliyanstudios.com.wav-117ebc084e529d943da44c953bd0329d.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0

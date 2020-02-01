@@ -29,7 +29,7 @@ onready var body_parts := {
 
 var limbs := ["LH", "LL", "RL", "RH", "H"]
 
-var speed := 300.0
+var speed := 500.0
 var velocity := Vector2.ZERO
 
 var throw_time := 0.0
@@ -56,7 +56,7 @@ func _process(delta):
 	velocity = controller_dir()
 	velocity = move_and_slide(velocity * (speed if limbs.has("LL") and limbs.has("RL") else (speed/2 if limbs.has("LL") or limbs.has("RL") else speed/4)) ) if !(Input.is_action_pressed("throw" + pid) and (has_axe_l or has_axe_r)) else Vector2.ZERO
 	
-	throw_time = clamp(throw_time + delta, 0, max_throw_duration)/max_throw_duration if Input.is_action_pressed("throw" + pid) and (has_axe_l or has_axe_r) else 0
+	throw_time = clamp(throw_time + delta, 0, max_throw_duration) if Input.is_action_pressed("throw" + pid) and (has_axe_l or has_axe_r) else 0
 	
 	body.scale.x = abs(body.scale.x) if controller_dir().x > 0 else (- abs(body.scale.x) if controller_dir().x < 0 else body.scale.x)
 	
@@ -89,7 +89,7 @@ func slice():
 	
 	fl_obj.type = removed
 	fl_obj.global_position = global_position
-	print(removed)
+
 	fl_obj.get_node("Sprite").texture = body_parts[removed].texture
 	get_parent().add_child(fl_obj)
 	if limbs.empty():
@@ -106,12 +106,14 @@ func throw():
 		has_axe_r = false
 	else:
 		return
-	
+	$audio_throw.pitch_scale = rand_range(0.9, 1.1)
+	$audio_throw.play()
 	var axe = throwing_axe_scene.instance()
 	$Position2D.look_at($Position2D.global_position + controller_dir())
 	axe.global_position = $Position2D/Position2D.global_position
 	axe.velocity = ($Position2D/Position2D.global_position - $Position2D.global_position).normalized()
-	axe.speed = throw_strength.interpolate(throw_time) * 10000 + 400
+	axe.speed = throw_strength.interpolate(throw_time/max_throw_duration) * 10000 + 400 
+	print(axe.speed)
 	get_parent().add_child(axe)
 	pass
 
@@ -120,8 +122,16 @@ func controller_dir():
 
 
 func _on_area_pickup_area_entered(area):
+	
 	var obj = area.get_parent()
 	if "type" in obj && "can_pick_up" in obj && obj.can_pick_up:
+		
+		if obj.type == "LH" or obj.type == "RH":
+			obj.type = "LH" if !limbs.has("LH") else ("RH" if !limbs.has("RH") else obj.type)
+		
+		if obj.type == "LL" or obj.type == "RL":
+			obj.type = "LL" if !limbs.has("LL") else ("RL" if !limbs.has("RL") else obj.type)
+		
 		if obj.type != "AXE" && !limbs.has(obj.type):
 			limbs.push_front(obj.type)
 			obj.queue_free()

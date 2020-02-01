@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=2]
+[gd_scene load_steps=17 format=2]
 
 [ext_resource path="res://Scripts/Player.gd" type="Script" id=1]
 [ext_resource path="res://Images/V.2/Player 1/Torso.png" type="Texture" id=2]
@@ -8,6 +8,7 @@
 [ext_resource path="res://Images/V.2/Player 1/R_Arm.png" type="Texture" id=6]
 [ext_resource path="res://Images/V.2/Player 1/Head.png" type="Texture" id=7]
 [ext_resource path="res://Images/V.2/Player 1/R_Leg.png" type="Texture" id=8]
+[ext_resource path="res://Sounds/Woosh-B11-www.fesliyanstudios.com.wav" type="AudioStream" id=9]
 
 [sub_resource type="Curve" id=1]
 _data = [ Vector2( 0, 0.172727 ), 0.0, 0.0, 0, 0, Vector2( 0.905455, 0.509091 ), 0.921052, 0.0, 0, 0, Vector2( 1, 1 ), 4.85294, 0.0, 0, 0 ]
@@ -823,4 +824,9 @@ position = Vector2( 150, 0 )
 [node name="CollisionShape2D" type="CollisionShape2D" parent="area_pickup"]
 position = Vector2( 3.7825, 41.6076 )
 shape = SubResource( 6 )
+
+[node name="audio_throw" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 9 )
+
+[node name="CPUParticles2D" type="CPUParticles2D" parent="."]
 [connection signal="area_entered" from="area_pickup" to="." method="_on_area_pickup_area_entered"]
