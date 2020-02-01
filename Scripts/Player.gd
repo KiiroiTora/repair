@@ -58,6 +58,9 @@ func _process(delta):
 	
 	throw_time = clamp(throw_time + delta, 0, max_throw_duration) if Input.is_action_pressed("throw" + pid) and (has_axe_l or has_axe_r) else 0
 	
+	$particles_throw.emitting = throw_time != 0
+	$particles_throw.speed_scale = 1 + throw_strength.interpolate(throw_time) * 4
+	
 	body.scale.x = abs(body.scale.x) if controller_dir().x > 0 else (- abs(body.scale.x) if controller_dir().x < 0 else body.scale.x)
 	
 	anim.play(("idle" if velocity.length() == 0 else "walk") if !(Input.is_action_pressed("throw" + pid) and (has_axe_l or has_axe_r)) else "swing"+("l" if has_axe_l else "r"))
@@ -116,10 +119,10 @@ func throw():
 	$audio_throw.pitch_scale = rand_range(0.9, 1.1)
 	$audio_throw.play()
 	var axe = throwing_axe_scene.instance()
-	$Position2D.look_at($Position2D.global_position + controller_dir())
+	$Position2D.look_at(($Position2D.global_position + controller_dir()))
 	axe.global_position = $Position2D/Position2D.global_position
 	axe.velocity = ($Position2D/Position2D.global_position - $Position2D.global_position).normalized()
-	axe.speed = throw_strength.interpolate(throw_time/max_throw_duration) * 10000 + 400 
+	axe.speed = throw_strength.interpolate(throw_time/max_throw_duration) * 6000 + 400 
 	print(axe.speed)
 	get_parent().add_child(axe)
 	pass

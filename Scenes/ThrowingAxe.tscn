@@ -13,6 +13,7 @@ radius = 25.0635
 radius = 14.6116
 
 [node name="ThrowingAxe" type="KinematicBody2D"]
+collision_layer = 8
 script = ExtResource( 1 )
 
 [node name="Sprite" type="Sprite" parent="."]

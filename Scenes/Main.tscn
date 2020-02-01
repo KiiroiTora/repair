@@ -5,3 +5,4 @@
 [node name="Main" type="Node2D"]
 
 [node name="Arena1" parent="." instance=ExtResource( 1 )]
+position = Vector2( -1.94803, 0 )
