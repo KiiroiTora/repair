@@ -3,9 +3,9 @@ extends KinematicBody2D
 signal pick_up(type)
 
 var velocity : Vector2
-var speed : float = 300
-onready var rot_speed = rand_range(360*4, 360*8) 
-onready var duration : float = rand_range(0.1, 0.5)
+var speed : float = 600
+onready var rot_speed = rand_range(360*2, 360*5) 
+onready var duration : float = 5#rand_range(0.1, 0.5)
 
 var elapsed : float = 0.0
 var can_pick_up = false
