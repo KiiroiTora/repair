@@ -1,6 +1,7 @@
 extends KinematicBody2D
 
 export var type = "LH"
+export var flying_curve: Curve
 
 onready var rot_speed : float = rand_range(360*4, 360*8) 
 onready var duration : float = rand_range(0.5, 1.5)
@@ -20,7 +21,8 @@ func _process(delta):
 		velocity = Vector2.ZERO
 		can_pick_up = true
 	else:
-		move_and_collide(velocity*delta)
-		$Sprite.rotate(deg2rad(rot_speed) * delta)
+		var coll = move_and_collide(velocity*delta*flying_curve.interpolate(elapsed/duration))
+		if !coll:
+			$Sprite.rotate(deg2rad(rot_speed) * delta * flying_curve.interpolate(elapsed/duration))
 
 
