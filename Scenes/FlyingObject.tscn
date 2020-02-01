@@ -2,24 +2,22 @@
 
 [ext_resource path="res://Scripts/FlyingObject.gd" type="Script" id=1]
 [ext_resource path="res://Images/V.2/Player 1/R_Arm.png" type="Texture" id=2]
+[ext_resource path="res://Resources/FlyingObjectCurve.tres" type="Curve" id=3]
 
-[sub_resource type="Curve" id=6]
-_data = [ Vector2( 0, 1 ), 0.0, 0.0, 0, 0, Vector2( 0.776786, 0.845455 ), -0.731818, -0.731818, 0, 0, Vector2( 0.866071, 0.272727 ), -0.00276665, 0.0, 0, 0, Vector2( 1, 0.281818 ), 0.0, 0.0, 0, 0, Vector2( 1, 0 ), 0.0, 0.0, 0, 0 ]
-
-[sub_resource type="Gradient" id=4]
+[sub_resource type="Gradient" id=3]
 colors = PoolColorArray( 1, 0.078125, 0.078125, 1, 0.25098, 0.0196078, 0.0196078, 0.564706 )
 
-[sub_resource type="CircleShape2D" id=5]
+[sub_resource type="CircleShape2D" id=1]
 radius = 34.5987
 
-[sub_resource type="CircleShape2D" id=3]
+[sub_resource type="CircleShape2D" id=2]
 radius = 22.9169
 
 [node name="FlyingObject" type="KinematicBody2D"]
 collision_layer = 2
 collision_mask = 16
 script = ExtResource( 1 )
-flying_curve = SubResource( 6 )
+flying_curve = ExtResource( 3 )
 
 [node name="Sprite" type="Sprite" parent="."]
 texture = ExtResource( 2 )
@@ -43,12 +41,12 @@ damping_random = 0.67
 angle = 399.3
 angle_random = 0.97
 scale_amount = 4.0
-color_ramp = SubResource( 4 )
+color_ramp = SubResource( 3 )
 
 [node name="Area2D" type="Area2D" parent="."]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
-shape = SubResource( 5 )
+shape = SubResource( 1 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-shape = SubResource( 3 )
+shape = SubResource( 2 )

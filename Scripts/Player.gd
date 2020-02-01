@@ -29,7 +29,7 @@ onready var body_parts := {
 
 var limbs := ["LH", "LL", "RL", "RH", "H"]
 
-var speed := 500.0
+var speed := 300.0
 var velocity := Vector2.ZERO
 
 var throw_time := 0.0
@@ -46,6 +46,9 @@ func _ready():
 
 func _process(delta):
 	
+	if Input.is_action_just_pressed("restart"):
+		get_tree().reload_current_scene()
+	
 	for b_part in body_parts.keys():
 		body_parts[b_part].visible = limbs.has(b_part)
 	if limbs.empty():
@@ -54,12 +57,15 @@ func _process(delta):
 		throw()
 	
 	velocity = controller_dir()
-	velocity = move_and_slide(velocity * (speed if limbs.has("LL") and limbs.has("RL") else (speed/2 if limbs.has("LL") or limbs.has("RL") else speed/4)) ) if !(Input.is_action_pressed("throw" + pid) and (has_axe_l or has_axe_r)) else Vector2.ZERO
+	velocity = move_and_slide(velocity * (2.5 if Input.is_action_pressed("run" + pid) else 1) * (speed if limbs.has("LL") and limbs.has("RL") else (speed/2 if limbs.has("LL") or limbs.has("RL") else speed/4)) ) if !(Input.is_action_pressed("throw" + pid) and (has_axe_l or has_axe_r)) else Vector2.ZERO
+	
+	$body/anim_body.playback_speed = 4 if Input.is_action_pressed("run" + pid) else 2
 	
 	throw_time = clamp(throw_time + delta, 0, max_throw_duration) if Input.is_action_pressed("throw" + pid) and (has_axe_l or has_axe_r) else 0
 	
 	$particles_throw.emitting = throw_time > 0.25
 	$particles_throw.speed_scale = 1 + throw_strength.interpolate(throw_time/max_throw_duration) * 8
+	$particles_throw.color = Color.yellow if throw_time >= max_throw_duration*0.95 else Color.green
 	$shadow.position.y = 137.669 if limbs.has("LL") or limbs.has("RL") else 60
 	body.scale.x = abs(body.scale.x) if controller_dir().x > 0 else (- abs(body.scale.x) if controller_dir().x < 0 else body.scale.x)
 	
@@ -122,7 +128,7 @@ func throw():
 	$Position2D.look_at(($Position2D.global_position + controller_dir()))
 	axe.global_position = $Position2D/Position2D.global_position
 	axe.velocity = ($Position2D/Position2D.global_position - $Position2D.global_position).normalized()
-	axe.speed = throw_strength.interpolate(throw_time/max_throw_duration) * 6000 + 400 
+	axe.speed = throw_strength.interpolate(throw_time/max_throw_duration) * 5000 + 300 
 	print(axe.speed)
 	get_parent().add_child(axe)
 	pass
