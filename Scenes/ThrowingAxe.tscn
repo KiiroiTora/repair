@@ -3,13 +3,13 @@
 [ext_resource path="res://Scripts/ThrowingAxe.gd" type="Script" id=1]
 [ext_resource path="res://Images/V.2/Player 1/Axe.png" type="Texture" id=2]
 
-[sub_resource type="Gradient" id=3]
+[sub_resource type="Gradient" id=1]
 colors = PoolColorArray( 0.279297, 0.279297, 0.279297, 1, 1, 1, 1, 0.160784 )
 
-[sub_resource type="CircleShape2D" id=1]
+[sub_resource type="CircleShape2D" id=2]
 radius = 25.0635
 
-[sub_resource type="CircleShape2D" id=2]
+[sub_resource type="CircleShape2D" id=3]
 radius = 14.6116
 
 [node name="ThrowingAxe" type="KinematicBody2D"]
@@ -25,13 +25,15 @@ amount = 10
 lifetime = 0.1
 local_coords = false
 texture = ExtResource( 2 )
-color_ramp = SubResource( 3 )
+color_ramp = SubResource( 1 )
 
 [node name="Area2D" type="Area2D" parent="."]
+collision_layer = 3
+collision_mask = 3
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
-shape = SubResource( 1 )
+shape = SubResource( 2 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-shape = SubResource( 2 )
-[connection signal="body_entered" from="Area2D" to="." method="_on_Area2D_body_entered"]
+shape = SubResource( 3 )
+[connection signal="area_entered" from="Area2D" to="." method="_on_Area2D_area_entered"]
