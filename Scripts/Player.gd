@@ -2,6 +2,7 @@ extends KinematicBody2D
 
 export var pid = "1"
 
+onready var anim := $body/anim_body
 onready var body := $body
 onready var head := $body/head
 onready var l_hand := $body/l_hand
@@ -28,6 +29,7 @@ var velocity := Vector2.ZERO
 
 func _ready():
 	randomize()
+	
 	pass # Replace with function body.
 
 func _process(delta):
@@ -36,6 +38,8 @@ func _process(delta):
 	velocity = move_and_slide(velocity)
 	
 	body.scale.x = abs(body.scale.x) if velocity.x > 0 else (- abs(body.scale.x) if velocity.x < 0 else body.scale.x)
+	
+	anim.play("idle" if velocity.x == 0 else "walk")
 	
 	for b_part in body_parts.keys():
 		body_parts[b_part].visible = limbs.has(b_part)
