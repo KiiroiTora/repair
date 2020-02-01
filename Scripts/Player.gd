@@ -35,6 +35,9 @@ func _ready():
 
 func _process(delta):
 	
+	if Input.is_action_just_released("throw" + pid):
+		throw()
+	
 	velocity = Vector2(Input.get_action_strength("right" + pid) - Input.get_action_strength("left" + pid), Input.get_action_strength("down" + pid) - Input.get_action_strength("up" + pid)).normalized() * speed
 	velocity = move_and_slide(velocity)
 	
@@ -53,4 +56,9 @@ func slice():
 	get_parent().add_child(fl_obj)
 
 func throw():
+	print("Throwing")
+	var axe = throwing_axe_scene.instance()
+	axe.global_position = self.global_position
+	axe.velocity = (get_global_mouse_position() - self.global_position).normalized()
+	get_parent().add_child(axe)
 	pass
