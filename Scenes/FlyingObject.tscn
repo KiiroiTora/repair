@@ -13,6 +13,7 @@ radius = 34.5987
 radius = 22.9169
 
 [node name="FlyingObject" type="KinematicBody2D"]
+collision_mask = 8
 script = ExtResource( 1 )
 
 [node name="Sprite" type="Sprite" parent="."]
