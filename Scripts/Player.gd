@@ -2,6 +2,10 @@ extends KinematicBody2D
 
 export var pid = "1"
 
+
+export var throw_strength : Curve
+export var max_throw_duration := 2
+
 onready var anim := $body/anim_body
 onready var body := $body
 onready var head := $body/head
@@ -28,18 +32,21 @@ var limbs := ["LH", "LL", "RL", "RH", "H"]
 var speed := 300.0
 var velocity := Vector2.ZERO
 
+var throw_time := 0.0
+
+
 func _ready():
 	randomize()
-	
-	pass # Replace with function body.
 
 func _process(delta):
 	
 	if Input.is_action_just_released("throw" + pid):
 		throw()
 	
-	velocity = Vector2(Input.get_action_strength("right" + pid) - Input.get_action_strength("left" + pid), Input.get_action_strength("down" + pid) - Input.get_action_strength("up" + pid)).normalized() * speed
-	velocity = move_and_slide(velocity)
+	velocity = controller_dir()
+	velocity = move_and_slide(velocity * speed) if !Input.is_action_pressed("throw" + pid) else Vector2.ZERO
+	
+	throw_time = clamp(throw_time + delta, 0, max_throw_duration)/max_throw_duration if Input.is_action_pressed("throw" + pid) else 0
 	
 	body.scale.x = abs(body.scale.x) if velocity.x > 0 else (- abs(body.scale.x) if velocity.x < 0 else body.scale.x)
 	
@@ -58,7 +65,12 @@ func slice():
 func throw():
 	print("throwing")
 	var axe = throwing_axe_scene.instance()
+	$Position2D.look_at($Position2D.global_position + controller_dir())
 	axe.global_position = $Position2D/Position2D.global_position
 	axe.velocity = ($Position2D/Position2D.global_position - $Position2D.global_position).normalized()
+	axe.speed = throw_strength.interpolate(throw_time) * 700
 	get_parent().add_child(axe)
 	pass
+
+func controller_dir():
+	return Vector2(Input.get_action_strength("right" + pid) - Input.get_action_strength("left" + pid), Input.get_action_strength("down" + pid) - Input.get_action_strength("up" + pid)).normalized()
