@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/wall impacts01.wav-48770c503c4d4d028c8b4a3c14cc3db2.sample"
+
+[deps]
+
+source_file="res://Sounds/footsteps/wall impacts01.wav"
+dest_files=[ "res://.import/wall impacts01.wav-48770c503c4d4d028c8b4a3c14cc3db2.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0

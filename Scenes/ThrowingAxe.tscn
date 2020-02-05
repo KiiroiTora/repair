@@ -1,7 +1,9 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://Scripts/ThrowingAxe.gd" type="Script" id=1]
 [ext_resource path="res://Images/V.2/Player 1/Axe.png" type="Texture" id=2]
+[ext_resource path="res://Resources/FlyingObjectCurve.tres" type="Curve" id=3]
+[ext_resource path="res://Sounds/footsteps/wall impacts03.wav" type="AudioStream" id=4]
 
 [sub_resource type="Gradient" id=1]
 colors = PoolColorArray( 0.279297, 0.279297, 0.279297, 1, 1, 1, 1, 0.160784 )
@@ -15,6 +17,7 @@ radius = 14.6116
 [node name="ThrowingAxe" type="KinematicBody2D"]
 collision_layer = 8
 script = ExtResource( 1 )
+flying_curve = ExtResource( 3 )
 
 [node name="Sprite" type="Sprite" parent="."]
 texture = ExtResource( 2 )
@@ -29,6 +32,7 @@ texture = ExtResource( 2 )
 color_ramp = SubResource( 1 )
 
 [node name="Area2D" type="Area2D" parent="."]
+monitorable = false
 collision_layer = 3
 collision_mask = 3
 
@@ -37,4 +41,7 @@ shape = SubResource( 2 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource( 3 )
+
+[node name="impact_sound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 4 )
 [connection signal="area_entered" from="Area2D" to="." method="_on_Area2D_area_entered"]

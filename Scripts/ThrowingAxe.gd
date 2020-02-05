@@ -2,6 +2,8 @@ extends KinematicBody2D
 
 signal pick_up(type)
 
+export var flying_curve: Curve
+
 var velocity : Vector2
 var speed : float = 600
 onready var rot_speed = rand_range(360*2, 360*5) 
@@ -19,10 +21,12 @@ func _process(delta):
 		velocity = Vector2.ZERO
 		can_pick_up = true
 	else:
-		var coll = move_and_collide(velocity * speed *delta)
+		var coll = move_and_collide(velocity * speed *delta * flying_curve.interpolate(elapsed/duration))
 		if coll:
 			velocity = velocity.bounce(coll.normal)
-		$Sprite.rotate(deg2rad(rot_speed) * delta)
+			$impact_sound.pitch_scale = rand_range(0.9, 1.1)
+			$impact_sound.play()
+		$Sprite.rotate(deg2rad(rot_speed) * delta * flying_curve.interpolate(elapsed/duration))
 		
 		
 		var s1 = disappearing_sprite.instance()
@@ -32,7 +36,8 @@ func _process(delta):
 		s1.z_index = -1
 		
 		get_parent().add_child(s1)
-
+	if can_pick_up:
+		$Area2D.set_deferred("monitorable", true)
 func _on_Area2D_area_entered(area):
 
 	if area.get_parent().has_method("slice") && !can_pick_up:

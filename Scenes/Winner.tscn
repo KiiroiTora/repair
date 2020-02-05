@@ -1,0 +1,126 @@
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://Images/Winner screen/P2.png" type="Texture" id=1]
+[ext_resource path="res://Images/Winner screen/P1.png" type="Texture" id=2]
+[ext_resource path="res://Images/Winner screen/P2 Victory.png" type="Texture" id=3]
+[ext_resource path="res://Images/Winner screen/P1 Victory.png" type="Texture" id=4]
+[ext_resource path="res://Images/Winner screen/Winner.png" type="Texture" id=5]
+
+[sub_resource type="Animation" id=1]
+resource_name = "bounce"
+length = 0.5
+loop = true
+step = 0.05
+tracks/0/type = "value"
+tracks/0/path = NodePath("CanvasLayer/1/p:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.25 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Vector2( 1, 1 ), Vector2( 1.08, 1.08 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("CanvasLayer/1/winner:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.25 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Vector2( 1, 1 ), Vector2( 1.08, 1.08 ) ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("CanvasLayer/2/winner:scale")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0, 0.25 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Vector2( 1, 1 ), Vector2( 1.08, 1.08 ) ]
+}
+tracks/3/type = "value"
+tracks/3/path = NodePath("CanvasLayer/2/p:scale")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"times": PoolRealArray( 0, 0.25 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Vector2( 1, 1 ), Vector2( 1.08, 1.08 ) ]
+}
+
+[node name="Winner" type="Node2D"]
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+autoplay = "bounce"
+anims/bounce = SubResource( 1 )
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+layer = 3
+
+[node name="1" type="Control" parent="CanvasLayer"]
+visible = false
+margin_right = 40.0
+margin_bottom = 40.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="img" type="TextureRect" parent="CanvasLayer/1"]
+margin_right = 1920.0
+margin_bottom = 1080.0
+texture = ExtResource( 4 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="winner" type="Sprite" parent="CanvasLayer/1"]
+position = Vector2( 492.864, 137.22 )
+scale = Vector2( 1.00943, 1.00943 )
+texture = ExtResource( 5 )
+offset = Vector2( 467.136, 402.78 )
+
+[node name="p" type="Sprite" parent="CanvasLayer/1"]
+position = Vector2( 1731.82, 164.391 )
+scale = Vector2( 1.00943, 1.00943 )
+texture = ExtResource( 2 )
+offset = Vector2( -771.82, 375.609 )
+
+[node name="2" type="Control" parent="CanvasLayer"]
+visible = false
+margin_right = 40.0
+margin_bottom = 40.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="img" type="TextureRect" parent="CanvasLayer/2"]
+margin_right = 1920.0
+margin_bottom = 1080.0
+texture = ExtResource( 3 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="winner" type="Sprite" parent="CanvasLayer/2"]
+position = Vector2( 481.996, 148.089 )
+scale = Vector2( 1.00943, 1.00943 )
+texture = ExtResource( 5 )
+offset = Vector2( 478.004, 391.911 )
+
+[node name="p" type="Sprite" parent="CanvasLayer/2"]
+position = Vector2( 1720.95, 175.259 )
+scale = Vector2( 1.00943, 1.00943 )
+texture = ExtResource( 1 )
+offset = Vector2( -760.952, 364.741 )

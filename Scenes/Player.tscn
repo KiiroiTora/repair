@@ -1,9 +1,9 @@
-[gd_scene load_steps=20 format=2]
+[gd_scene load_steps=25 format=2]
 
 [ext_resource path="res://Scripts/Player.gd" type="Script" id=1]
 [ext_resource path="res://Images/V.2/Player 1/Torso.png" type="Texture" id=2]
 [ext_resource path="res://Images/V.2/Player 1/L_Arm.png" type="Texture" id=3]
-[ext_resource path="res://Images/V.2/Player 1/Axe.png" type="Texture" id=4]
+[ext_resource path="res://Resources/axe_charge.tres" type="SpriteFrames" id=4]
 [ext_resource path="res://Images/V.2/Player 1/L_Leg.png" type="Texture" id=5]
 [ext_resource path="res://Images/V.2/Player 1/R_Arm.png" type="Texture" id=6]
 [ext_resource path="res://Images/V.2/Player 1/Head.png" type="Texture" id=7]
@@ -12,6 +12,11 @@
 [ext_resource path="res://Sounds/Guts-A2-www.fesliyanstudios.com.wav" type="AudioStream" id=10]
 [ext_resource path="res://Scenes/particles_throw.tscn" type="PackedScene" id=11]
 [ext_resource path="res://Images/Player Shadow.png" type="Texture" id=12]
+[ext_resource path="res://Scenes/RandomAudioPlayer.tscn" type="PackedScene" id=13]
+[ext_resource path="res://Sounds/footsteps/footsteps04.wav" type="AudioStream" id=14]
+[ext_resource path="res://Sounds/footsteps/footsteps01.wav" type="AudioStream" id=15]
+[ext_resource path="res://Sounds/footsteps/footsteps03.wav" type="AudioStream" id=16]
+[ext_resource path="res://Sounds/footsteps/footsteps02.wav" type="AudioStream" id=17]
 
 [sub_resource type="Curve" id=1]
 _data = [ Vector2( 0, 0.172727 ), 0.0, 0.0, 0, 0, Vector2( 0.905455, 0.509091 ), 0.921052, 0.0, 0, 0, Vector2( 1, 1 ), 4.85294, 0.0, 0, 0 ]
@@ -383,7 +388,7 @@ tracks/13/keys = {
 "values": [ 0.0 ]
 }
 
-[sub_resource type="Animation" id=7]
+[sub_resource type="Animation" id=4]
 resource_name = "swingr"
 loop = true
 tracks/0/type = "value"
@@ -555,7 +560,7 @@ tracks/13/keys = {
 "values": [ 0.0 ]
 }
 
-[sub_resource type="Animation" id=4]
+[sub_resource type="Animation" id=5]
 loop = true
 step = 0.05
 tracks/0/type = "value"
@@ -750,13 +755,30 @@ tracks/15/keys = {
 "update": 0,
 "values": [ -42.6518, 0.0, 26.0872, 0.0 ]
 }
+tracks/16/type = "method"
+tracks/16/path = NodePath("../RandomAudioPlayer")
+tracks/16/interp = 1
+tracks/16/loop_wrap = true
+tracks/16/imported = false
+tracks/16/enabled = true
+tracks/16/keys = {
+"times": PoolRealArray( 0.25, 0.75 ),
+"transitions": PoolRealArray( 1, 1 ),
+"values": [ {
+"args": [  ],
+"method": "play"
+}, {
+"args": [  ],
+"method": "play"
+} ]
+}
 
-[sub_resource type="CapsuleShape2D" id=5]
+[sub_resource type="CapsuleShape2D" id=6]
 radius = 24.3484
-height = 107.598
+height = 68.4352
 
-[sub_resource type="CircleShape2D" id=6]
-radius = 102.919
+[sub_resource type="CircleShape2D" id=7]
+radius = 89.5256
 
 [node name="Player" type="KinematicBody2D"]
 collision_layer = 2
@@ -769,40 +791,47 @@ position = Vector2( 0, 0.222222 )
 texture = ExtResource( 2 )
 
 [node name="head" type="Sprite" parent="body"]
-position = Vector2( 0, -42.3545 )
+position = Vector2( 0, -44.4546 )
+scale = Vector2( 0.935, 0.935 )
 texture = ExtResource( 7 )
+offset = Vector2( -0.580983, -5.85335 )
 
 [node name="l_hand" type="Sprite" parent="body"]
-position = Vector2( 18.2054, -14.7958 )
-scale = Vector2( 1.06841, 1.06841 )
+position = Vector2( 17.7851, -11.9911 )
+rotation = 0.038675
+scale = Vector2( 0.9, 0.9 )
 z_index = -1
 texture = ExtResource( 3 )
 offset = Vector2( 19.4441, 31.6499 )
 
-[node name="axe" type="Sprite" parent="body/l_hand"]
+[node name="axe" type="AnimatedSprite" parent="body/l_hand"]
 position = Vector2( 71.119, 3.33566 )
 rotation = -1.309
-texture = ExtResource( 4 )
+frames = ExtResource( 4 )
 
 [node name="r_hand" type="Sprite" parent="body"]
-position = Vector2( -22.5087, -16.592 )
+position = Vector2( -22.1233, -13.6472 )
+rotation = -0.0520916
+scale = Vector2( 0.9, 0.9 )
 z_index = 2
 texture = ExtResource( 6 )
 offset = Vector2( -13.5824, 21.845 )
 
-[node name="axe" type="Sprite" parent="body/r_hand"]
+[node name="axe" type="AnimatedSprite" parent="body/r_hand"]
 position = Vector2( 14.4326, 69.9889 )
 rotation = -0.222945
 z_index = -1
-texture = ExtResource( 4 )
+frames = ExtResource( 4 )
 
 [node name="l_leg" type="Sprite" parent="body"]
-position = Vector2( 21.9502, 85.8215 )
+position = Vector2( 22.8958, 85.7515 )
+rotation = -0.0255209
 z_index = -1
 texture = ExtResource( 5 )
 
 [node name="r_leg" type="Sprite" parent="body"]
-position = Vector2( -14.7633, 93.9516 )
+position = Vector2( -15.9541, 93.5663 )
+rotation = 0.022835
 texture = ExtResource( 8 )
 
 [node name="anim_body" type="AnimationPlayer" parent="body"]
@@ -810,12 +839,12 @@ autoplay = "idle"
 playback_speed = 2.0
 anims/idle = SubResource( 2 )
 anims/swingl = SubResource( 3 )
-anims/swingr = SubResource( 7 )
-anims/walk = SubResource( 4 )
+anims/swingr = SubResource( 4 )
+anims/walk = SubResource( 5 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2( 2.44348, 46.4268 )
-shape = SubResource( 5 )
+position = Vector2( -1.26285, 46.4268 )
+shape = SubResource( 6 )
 
 [node name="Position2D" type="Position2D" parent="."]
 position = Vector2( 2.44348, 46.4268 )
@@ -827,7 +856,7 @@ position = Vector2( 150, 0 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="area_pickup"]
 position = Vector2( 3.7825, 41.6076 )
-shape = SubResource( 6 )
+shape = SubResource( 7 )
 
 [node name="audio_throw" type="AudioStreamPlayer" parent="."]
 stream = ExtResource( 9 )
@@ -836,6 +865,7 @@ stream = ExtResource( 9 )
 stream = ExtResource( 10 )
 
 [node name="particles_throw" parent="." instance=ExtResource( 11 )]
+visible = false
 position = Vector2( 0, 109.701 )
 preprocess = 0.0
 
@@ -843,4 +873,22 @@ preprocess = 0.0
 position = Vector2( 3.783, 130 )
 z_index = -2
 texture = ExtResource( 12 )
+
+[node name="timer_win" type="Timer" parent="."]
+wait_time = 0.2
+
+[node name="RandomAudioPlayer" parent="." instance=ExtResource( 13 )]
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="RandomAudioPlayer"]
+stream = ExtResource( 15 )
+
+[node name="AudioStreamPlayer2" type="AudioStreamPlayer" parent="RandomAudioPlayer"]
+stream = ExtResource( 17 )
+
+[node name="AudioStreamPlayer3" type="AudioStreamPlayer" parent="RandomAudioPlayer"]
+stream = ExtResource( 16 )
+
+[node name="AudioStreamPlayer4" type="AudioStreamPlayer" parent="RandomAudioPlayer"]
+stream = ExtResource( 14 )
 [connection signal="area_entered" from="area_pickup" to="." method="_on_area_pickup_area_entered"]
+[connection signal="timeout" from="timer_win" to="." method="_on_timer_win_timeout"]

@@ -1,7 +1,13 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://Scenes/Player.tscn" type="PackedScene" id=1]
-[ext_resource path="res://Images/Background 1.png" type="Texture" id=2]
+[ext_resource path="res://Images/Arena V.2/Legend Statue Shadow.png" type="Texture" id=2]
+[ext_resource path="res://Images/Arena V.2/Arena.png" type="Texture" id=3]
+[ext_resource path="res://Images/Arena V.2/Berserker statue shadow.png" type="Texture" id=4]
+[ext_resource path="res://Images/Split statues/LS Bottom.png" type="Texture" id=5]
+[ext_resource path="res://Images/Split statues/BS Bottom.png" type="Texture" id=6]
+[ext_resource path="res://Images/Split statues/BS Top.png" type="Texture" id=7]
+[ext_resource path="res://Images/Split statues/LS Top.png" type="Texture" id=8]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 1355.43, 183.591 )
@@ -9,13 +15,19 @@ extents = Vector2( 1355.43, 183.591 )
 [sub_resource type="RectangleShape2D" id=2]
 extents = Vector2( 212.031, 872.106 )
 
+[sub_resource type="CapsuleShape2D" id=3]
+radius = 69.3905
+height = 114.158
+
 [node name="Arena1" type="Node2D"]
 
 [node name="Player" parent="." instance=ExtResource( 1 )]
 position = Vector2( 158.796, 110.351 )
+z_index = 2
 
 [node name="Player2" parent="." instance=ExtResource( 1 )]
 position = Vector2( 1756.2, 888.314 )
+z_index = 1
 pid = "2"
 
 [node name="TopWall" type="StaticBody2D" parent="."]
@@ -49,11 +61,61 @@ collision_layer = 31775
 position = Vector2( 179.615, 559.119 )
 shape = SubResource( 2 )
 
-[node name="Sprite" type="Sprite" parent="."]
-position = Vector2( 949.854, 551.695 )
-z_index = -3
-texture = ExtResource( 2 )
+[node name="arena" type="Sprite" parent="."]
+position = Vector2( 957.256, 542.442 )
+z_index = -5
+texture = ExtResource( 3 )
 
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2( 1044.59, 529.652 )
 zoom = Vector2( 2, 2 )
+
+[node name="Berserker statue shadow" type="Sprite" parent="."]
+position = Vector2( 807.132, 551.035 )
+scale = Vector2( 0.75, 0.75 )
+z_index = -5
+texture = ExtResource( 4 )
+
+[node name="Legend Statue Shadow" type="Sprite" parent="."]
+position = Vector2( 1098.22, 551.035 )
+scale = Vector2( 0.75, 0.75 )
+z_index = -5
+texture = ExtResource( 2 )
+
+[node name="BS Bottom" type="Sprite" parent="."]
+position = Vector2( 821.482, 546.252 )
+scale = Vector2( 0.75, 0.75 )
+z_index = -1
+texture = ExtResource( 6 )
+
+[node name="StaticBody2D" type="StaticBody2D" parent="BS Bottom"]
+position = Vector2( -740.245, 37.0122 )
+collision_layer = 31775
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BS Bottom/StaticBody2D"]
+shape = SubResource( 3 )
+
+[node name="BS Top" type="Sprite" parent="."]
+position = Vector2( 821.482, 546.252 )
+scale = Vector2( 0.75, 0.75 )
+z_index = 4
+texture = ExtResource( 7 )
+
+[node name="LS Bottom" type="Sprite" parent="."]
+position = Vector2( 1086.26, 548.643 )
+scale = Vector2( 0.75, 0.75 )
+z_index = -1
+texture = ExtResource( 5 )
+
+[node name="StaticBody2D2" type="StaticBody2D" parent="LS Bottom"]
+position = Vector2( 756.369, 34.6578 )
+collision_layer = 31775
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="LS Bottom/StaticBody2D2"]
+shape = SubResource( 3 )
+
+[node name="LS Top" type="Sprite" parent="."]
+position = Vector2( 1081.48, 553.427 )
+scale = Vector2( 0.75, 0.75 )
+z_index = 4
+texture = ExtResource( 8 )
