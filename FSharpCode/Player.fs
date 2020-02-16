@@ -4,6 +4,18 @@ open Exts
 open Godot.Collections
 open ThrowingAxe
 
+type Pickup = Limb of FlyingObject.FlyingObjectFs | Axe of ThrowingAxeFs
+type Pickup with 
+    member x.obj_type = 
+        match x with
+        | (Limb(y)) -> (y.obj_type)
+        | (Axe(y)) -> (y.obj_type)
+    static member (<--) (x, z) = 
+        match x with
+        | (Limb(y)) -> y.obj_type <- z
+        | (Axe(y)) -> ()
+        | _ -> ()
+
 type PlayerFS() as this =
     inherit KinematicBody2D()
 
@@ -61,6 +73,8 @@ type PlayerFS() as this =
     
     let has_limb x = List.contains x limbs
 
+    let optional = OptionalBuilder()
+    
     override this._Ready() =
         body.Value.Texture <- ResourceLoader.Load("res://Images/Character V.3/P" + pid.ToString() + "/Torso.png")
         head.Value.Texture <- ResourceLoader.Load("res://Images/Character V.3/P" + pid.ToString() + "/Head.png")
@@ -106,12 +120,16 @@ type PlayerFS() as this =
         r_axe.Value.Frame <- if not is_charging_r then 0 else int ((throw_time / max_throw_duration) * 8.0f)
         r_axe.Value.Scale <- if not is_charging_r then Vector2.One else Vector2.One * ((throw_time / max_throw_duration) / 5.0f) + Vector2.One
 
+        this.GetNode'<Sprite>("shadow").Value.Position <- Vector2(this.GetNode'<Sprite>("shadow").Value.Position.x , if List.contains LL limbs || List.contains RL limbs then 137.669f else 60.0f)
         body.Value.XFlipDir <| controller_dir().x
 
         anim.Value.Play (if not is_charging then (if velocity.Length() = 0.0f then "idle" else "walk") else ("swing" + (if has_axe_l then "l" else "r")))
 
         if is_charging_l then do l_hand.Value.LookAt(controller_dir().Rotated(Mathf.Deg2Rad(-150.0f)) - l_hand.Value.GlobalPosition)
         if is_charging_r then do r_hand.Value.LookAt(controller_dir().Rotated(Mathf.Deg2Rad(-150.0f)) - r_hand.Value.GlobalPosition)
+
+        l_axe.Value.Visible <- has_axe_l
+        r_axe.Value.Visible <- has_axe_r
 
     member this.slice() = 
         if not (limbs.IsEmpty) then do
@@ -137,8 +155,8 @@ type PlayerFS() as this =
             fl_obj.GlobalPosition <- this.GlobalPosition
 
             (fl_obj.GetNode'<Sprite> "Sprite").Value.Texture <- body_parts.Item(removed).Value.Texture
-
-            // (fl_obj.GetNode'<Particles2D> "Sprite/BloodParticles/BloodParticles").Value.Emitting <- true
+            this.GetParent().CallDeferred("add_child", fl_obj)
+            (fl_obj.GetNode'<CPUParticles2D> "Sprite/BloodParticles/BloodParticles").Value.Emitting <- true
             
             if limbs.IsEmpty then do
                 this.die()
@@ -166,45 +184,59 @@ type PlayerFS() as this =
 
         ()
 
+
     member this._on_area_pickup_area_entered(area: Area2D) =
-        if area.GetParent() :? FlyingObject.FlyingObjectFs
-        then do
-            let obj = area.GetParent() :?> FSharpCode.FlyingObject.FlyingObjectFs
-            obj.obj_type <- 
-                match obj.obj_type with
+        optional {
+            let! obj = optional {
+                if area.GetParent() :? FlyingObject.FlyingObjectFs 
+                then return Limb(area.GetParent() :?> FlyingObject.FlyingObjectFs)
+                else 
+                    if area.GetParent() :? ThrowingAxeFs
+                    then return (Axe(area.GetParent() :?> ThrowingAxeFs))
+            }
+
+            let t = obj.obj_type
+            obj <-- 
+                match t with
                 | LH | RH when not (has_limb LH) -> LH
                 | LH | RH when not (has_limb RH) -> RH
-                | LH | RH -> obj.obj_type
+                | LH | RH -> t
                 | LL | RL when not (has_limb LL) -> LL
                 | LL | RL when not (has_limb RL) -> RL
-                | LL | RL -> obj.obj_type
-                | _ -> obj.obj_type
-            if obj.obj_type <> AXE && has_limb (obj.obj_type) 
-            then do
-                limbs <- obj.obj_type :: limbs
-                // obj.pickup
-                obj.QueueFree()
-            else 
-                if obj.obj_type = AXE 
-                then
-                    match (has_limb LH , has_limb RH, has_axe_l, has_axe_r) with
-                    | (true, true, false, false) -> 
-                        has_axe_l <- true
-                        obj.QueueFree()
-                    | (true, true, true, false) -> 
-                        has_axe_r <- true
-                        obj.QueueFree()
-                    | (true, true, false, true) -> 
-                        has_axe_l <- true
-                        obj.QueueFree()
-                    | (false, true, _, false) -> 
-                        has_axe_r <- true
-                        obj.QueueFree()
-                    | (true, false, false, _) -> 
-                        has_axe_l <- true
-                        obj.QueueFree()
-                    | _ -> ()
+                | LL | RL -> t
+                | _ -> t
         
+        
+            if (t <> AXE) && not <| has_limb (t) 
+            then do
+                limbs <- t :: limbs
+                match obj with 
+                | Axe(x) -> x.QueueFree()
+                | Limb(x) -> x.QueueFree()
+                | _ -> ()
+
+            else 
+                if t = AXE 
+                then
+                    GD.Print "Near Axe"
+                    let destroy_axe () = 
+                        match obj with 
+                        | Axe(x) -> x.QueueFree()
+                        | Limb(x) -> x.QueueFree()
+
+                    match (has_limb LH , has_limb RH, has_axe_l, has_axe_r) with
+                    | (true, _, false, _) -> destroy_axe () 
+                    | (_, true, _, false) -> destroy_axe ()
+                    | _ -> ()
+
+                    let (lv, rv) = 
+                        match (has_limb LH , has_limb RH, has_axe_l, has_axe_r) with
+                        | (true, _, false, _) -> (true, has_axe_r)
+                        | (_, true, _, false) -> (has_axe_l, true)
+                        | _ -> (has_axe_l, has_axe_r)
+                    has_axe_l <- lv
+                    has_axe_r <- rv
+        } |> ignore
         ()
     member this._on_timer_win_timeout() =
         let wscr = winscreen.Value.Instance()

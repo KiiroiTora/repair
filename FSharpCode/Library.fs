@@ -2,6 +2,7 @@
 
 open Godot
 
+type ObjectType = LH | RH | RL | LL | H | AXE
 module Exts =
 
     type AudioStreamPlayer with
@@ -32,7 +33,41 @@ module Exts =
             this.RemoveAt 0
             ret
         member this.PushFront x = this.Insert(0, x)
+[<Struct>]
+type OptionalBuilder =
+  member __.Bind(opt, binder) =
+    match opt with
+    | Some value -> binder value
+    | None -> None
+  member __.Return(value) =
+    Some value
+  member __.Zero() =
+    None
+  member __.Combine(a, b) = 
+    match a, b with 
+    | Some a', Some b' -> Some(a', b')
+    | Some a', None -> None
+    | None, Some b' -> None
+    | None, None -> None
+  member __.Delay(f) =
+    f()  
 
+type Part = {
+    Type: System.Type;
+    Format: int option;
+    Name: string;
+    Part: int16;
+    Number: float32;
+    FileName: string option
+}
 
-type ObjectType = LH | RH | RL | LL | H | AXE
+type PartResult = {
+    ty: System.Type;
+    format: string;
+    name: string;
+    part: int16;
+    number: float32;
+    fileName: string
+}
+
 

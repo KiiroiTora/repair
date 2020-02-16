@@ -23,7 +23,7 @@ type ThrowingAxeFs() as this=
     member val velocity = Vector2.Zero with get, set
     member val speed = 600.0f with get, set
 
-    member val obj_type = ObjectType.AXE    
+    member val obj_type = ObjectType.AXE
     member this.can_pick_up () = elapsed >= duration.Value    
     member this.on_pick_up = pick_up.Publish
     override this._Process(delta) =

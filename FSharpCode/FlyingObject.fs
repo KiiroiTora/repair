@@ -12,18 +12,17 @@ type FlyingObjectFs() as this=
     let flying_curve = ResourceLoader.Load'<Curve>("res://Resources/FlyingObjectCurve.tres")
 
     let rot_speed = float32 <| GD.RandRange(360.0*4.0, 360.0*8.0) 
-    let duration = float32 <| GD.RandRange(360.0*4.0, 360.0*8.0)  
+    let duration = float32 <| GD.RandRange(0.5, 1.5)  
 
     let mutable velocity = Vector2.Zero 
     let mutable elapsed = 0.0f
-
+    
     member val obj_type = H with get, set
     override this._Ready() =
         velocity <- Vector2(float32 <| GD.RandRange(-1.0, 1.0), float32 <| GD.RandRange(-1.0, 1.0)).Normalized() * (float32 <| GD.RandRange(600.0, 900.0))
 
     override this._Process (delta) =
         elapsed <- elapsed + delta
-
         if (elapsed >= duration) then do
             velocity <- Vector2.Zero
 
