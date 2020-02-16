@@ -464,7 +464,7 @@ texture = ExtResource( 11 )
 position = Vector2( 1680.4, 608.336 )
 frames = SubResource( 1 )
 animation = "New Anim"
-frame = 4
+frame = 2
 speed_scale = 2.05
 playing = true
 

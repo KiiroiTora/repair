@@ -3,6 +3,7 @@
 open Godot
 
 module Exts =
+
     type AudioStreamPlayer with
         member this.Play'() =
             this.PitchScale <- float32 <| GD.RandRange(0.9, 1.1)
@@ -24,7 +25,14 @@ module Exts =
                    if dir < 0.0f
                     then Vector2(-abs (this.Scale.x), abs (this.Scale.y))
                     else this.Scale
-open Exts
+    type Godot.Collections.Array with 
+        member this.Empty() = this.Count > 0
+        member this.PopFront() = 
+            let ret = this.Item 0
+            this.RemoveAt 0
+            ret
+        member this.PushFront x = this.Insert(0, x)
+
 
 type ObjectType = LH | RH | RL | LL | H | AXE
 

@@ -48,7 +48,7 @@ type ThrowingAxeFs() as this=
         this.GetParent().AddChild(s1)
 
         if this.can_pick_up() then do area.Value.SetDeferred("monitorable", true)
-    member this._on_Area2D_area_entered(area: Area)=
+    member this._on_Area2D_area_entered(area: Area2D)=
         if area.GetParent().HasMethod("slice") && not (this.can_pick_up()) then do area.GetParent().Call("slice") |> ignore
 
 
