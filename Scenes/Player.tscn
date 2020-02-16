@@ -1,6 +1,6 @@
-[gd_scene load_steps=25 format=2]
+[gd_scene load_steps=24 format=2]
 
-[ext_resource path="res://Scripts/Player.gd" type="Script" id=1]
+[ext_resource path="res://Scripts/Player.cs" type="Script" id=1]
 [ext_resource path="res://Images/V.2/Player 1/Torso.png" type="Texture" id=2]
 [ext_resource path="res://Images/V.2/Player 1/L_Arm.png" type="Texture" id=3]
 [ext_resource path="res://Resources/axe_charge.tres" type="SpriteFrames" id=4]
@@ -18,10 +18,7 @@
 [ext_resource path="res://Sounds/footsteps/footsteps03.wav" type="AudioStream" id=16]
 [ext_resource path="res://Sounds/footsteps/footsteps02.wav" type="AudioStream" id=17]
 
-[sub_resource type="Curve" id=1]
-_data = [ Vector2( 0, 0.172727 ), 0.0, 0.0, 0, 0, Vector2( 0.905455, 0.509091 ), 0.921052, 0.0, 0, 0, Vector2( 1, 1 ), 4.85294, 0.0, 0, 0 ]
-
-[sub_resource type="Animation" id=2]
+[sub_resource type="Animation" id=1]
 loop = true
 tracks/0/type = "value"
 tracks/0/path = NodePath("r_hand:position")
@@ -216,7 +213,7 @@ tracks/15/keys = {
 "values": [ 0.0 ]
 }
 
-[sub_resource type="Animation" id=3]
+[sub_resource type="Animation" id=2]
 resource_name = "swingl"
 loop = true
 tracks/0/type = "value"
@@ -388,7 +385,7 @@ tracks/13/keys = {
 "values": [ 0.0 ]
 }
 
-[sub_resource type="Animation" id=4]
+[sub_resource type="Animation" id=3]
 resource_name = "swingr"
 loop = true
 tracks/0/type = "value"
@@ -560,7 +557,7 @@ tracks/13/keys = {
 "values": [ 0.0 ]
 }
 
-[sub_resource type="Animation" id=5]
+[sub_resource type="Animation" id=4]
 loop = true
 step = 0.05
 tracks/0/type = "value"
@@ -773,18 +770,17 @@ tracks/16/keys = {
 } ]
 }
 
-[sub_resource type="CapsuleShape2D" id=6]
+[sub_resource type="CapsuleShape2D" id=5]
 radius = 24.3484
 height = 68.4352
 
-[sub_resource type="CircleShape2D" id=7]
+[sub_resource type="CircleShape2D" id=6]
 radius = 89.5256
 
 [node name="Player" type="KinematicBody2D"]
 collision_layer = 2
 collision_mask = 4
 script = ExtResource( 1 )
-throw_strength = SubResource( 1 )
 
 [node name="body" type="Sprite" parent="."]
 position = Vector2( 0, 0.222222 )
@@ -837,14 +833,14 @@ texture = ExtResource( 8 )
 [node name="anim_body" type="AnimationPlayer" parent="body"]
 autoplay = "idle"
 playback_speed = 2.0
-anims/idle = SubResource( 2 )
-anims/swingl = SubResource( 3 )
-anims/swingr = SubResource( 4 )
-anims/walk = SubResource( 5 )
+anims/idle = SubResource( 1 )
+anims/swingl = SubResource( 2 )
+anims/swingr = SubResource( 3 )
+anims/walk = SubResource( 4 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2( -1.26285, 46.4268 )
-shape = SubResource( 6 )
+shape = SubResource( 5 )
 
 [node name="Position2D" type="Position2D" parent="."]
 position = Vector2( 2.44348, 46.4268 )
@@ -856,7 +852,7 @@ position = Vector2( 150, 0 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="area_pickup"]
 position = Vector2( 3.7825, 41.6076 )
-shape = SubResource( 7 )
+shape = SubResource( 6 )
 
 [node name="audio_throw" type="AudioStreamPlayer" parent="."]
 stream = ExtResource( 9 )

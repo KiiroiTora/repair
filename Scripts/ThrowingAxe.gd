@@ -1,5 +1,5 @@
 extends KinematicBody2D
-
+class_name ThrowingAxe
 signal pick_up(type)
 
 export var flying_curve: Curve

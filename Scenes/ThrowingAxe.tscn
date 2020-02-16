@@ -1,8 +1,7 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=7 format=2]
 
-[ext_resource path="res://Scripts/ThrowingAxe.gd" type="Script" id=1]
+[ext_resource path="res://Scripts/ThrowingAxe.cs" type="Script" id=1]
 [ext_resource path="res://Images/V.2/Player 1/Axe.png" type="Texture" id=2]
-[ext_resource path="res://Resources/FlyingObjectCurve.tres" type="Curve" id=3]
 [ext_resource path="res://Sounds/footsteps/wall impacts03.wav" type="AudioStream" id=4]
 
 [sub_resource type="Gradient" id=1]
@@ -17,7 +16,6 @@ radius = 14.6116
 [node name="ThrowingAxe" type="KinematicBody2D"]
 collision_layer = 8
 script = ExtResource( 1 )
-flying_curve = ExtResource( 3 )
 
 [node name="Sprite" type="Sprite" parent="."]
 texture = ExtResource( 2 )

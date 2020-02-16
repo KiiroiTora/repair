@@ -1,0 +1,27 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "repair1", "repair1.csproj", "{9A374B7F-697A-470C-90C6-E154859C8B04}"
+EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "FSharpCode", "FSharpCode\FSharpCode.fsproj", "{82F23D9F-D347-4DAB-8832-2D925059B14D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+	Debug|Any CPU = Debug|Any CPU
+	Release|Any CPU = Release|Any CPU
+	Tools|Any CPU = Tools|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9A374B7F-697A-470C-90C6-E154859C8B04}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9A374B7F-697A-470C-90C6-E154859C8B04}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9A374B7F-697A-470C-90C6-E154859C8B04}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9A374B7F-697A-470C-90C6-E154859C8B04}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9A374B7F-697A-470C-90C6-E154859C8B04}.Tools|Any CPU.ActiveCfg = Tools|Any CPU
+		{9A374B7F-697A-470C-90C6-E154859C8B04}.Tools|Any CPU.Build.0 = Tools|Any CPU
+		{82F23D9F-D347-4DAB-8832-2D925059B14D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{82F23D9F-D347-4DAB-8832-2D925059B14D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{82F23D9F-D347-4DAB-8832-2D925059B14D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{82F23D9F-D347-4DAB-8832-2D925059B14D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{82F23D9F-D347-4DAB-8832-2D925059B14D}.Tools|Any CPU.ActiveCfg = Debug|Any CPU
+		{82F23D9F-D347-4DAB-8832-2D925059B14D}.Tools|Any CPU.Build.0 = Debug|Any CPU
+	EndGlobalSection
+EndGlobal

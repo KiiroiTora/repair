@@ -77,11 +77,6 @@ func _process(delta):
 	$body/r_hand/axe.frame = 0 if !(Input.is_action_pressed("throw" + pid) and has_axe_r and !has_axe_l) else int((throw_time/max_throw_duration) * 8)
 	$body/r_hand/axe.scale = Vector2.ONE if !(Input.is_action_pressed("throw" + pid) and has_axe_r and !has_axe_l) else Vector2.ONE * ((throw_time/max_throw_duration)/5) + Vector2.ONE 
 
-	
-
-	
-	
-	
 	$particles_throw.emitting = throw_time > 0.25
 	$particles_throw.speed_scale = 1 + throw_strength.interpolate(throw_time/max_throw_duration) * 8
 	$particles_throw.color = Color.yellow if throw_time >= max_throw_duration*0.95 else Color.green
@@ -138,10 +133,6 @@ func slice():
 		die()
 
 func die():
-	print("Player " + str(1 if pid == "2" else 2))
-	
-	
-	
 	$timer_win.start()
 	
 func throw():

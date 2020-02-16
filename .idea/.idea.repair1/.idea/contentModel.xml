@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ContentModelStore">
+    <e p="$USER_HOME$/.Rider2019.2/system/extResources" t="IncludeRecursive" />
+    <e p="$USER_HOME$/.Rider2019.2/system/resharper-host/local/Transient/ReSharperHost/v192/SolutionCaches/_repair1.-947152579.00" t="ExcludeRecursive" />
+    <e p="$USER_HOME$/.Rider2019.2/system/rust_expanded_macros/swlGWlEO/expansions" t="IncludeRecursive" />
+    <e p="$PROJECT_DIR$" t="IncludeRecursive">
+      <e p=".mono/temp/bin" t="ExcludeRecursive" />
+      <e p=".mono/temp/obj" t="ExcludeRecursive" />
+      <e p="FSharpCode" t="IncludeRecursive">
+        <e p="AssemblyInfo.fs" t="Include" />
+        <e p="FSharpCode.fsproj" t="IncludeRecursive" />
+        <e p="FlyingObject.fs" t="Include" />
+        <e p="Library.fs" t="Include" />
+        <e p="Player.fs" t="Include" />
+        <e p="Script.fsx" t="Include" />
+        <e p="ThrowingAxeFs.fs" t="Include" />
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="obj" t="ExcludeRecursive" />
+        <e p="packages.config" t="Include" />
+      </e>
+      <e p="Properties" t="Include">
+        <e p="AssemblyInfo.cs" t="Include" />
+      </e>
+      <e p="Scenes" t="Include" />
+      <e p="Scripts" t="Include">
+        <e p="FlyingObject.cs" t="Include" />
+        <e p="Player.cs" t="Include" />
+        <e p="ThrowingAxe.cs" t="Include" />
+      </e>
+      <e p="packages" t="ExcludeRecursive" />
+      <e p="packages.config" t="Include" />
+      <e p="repair1.csproj" t="IncludeRecursive" />
+      <e p="repair1.sln" t="IncludeFlat" />
+    </e>
+  </component>
+</project>

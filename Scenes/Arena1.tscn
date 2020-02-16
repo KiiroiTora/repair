@@ -28,7 +28,7 @@ z_index = 2
 [node name="Player2" parent="." instance=ExtResource( 1 )]
 position = Vector2( 1756.2, 888.314 )
 z_index = 1
-pid = "2"
+pid = 2
 
 [node name="TopWall" type="StaticBody2D" parent="."]
 position = Vector2( 924.037, 0 )
