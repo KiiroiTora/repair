@@ -13,7 +13,7 @@ type PlayerFS() as this =
 
     let throw_strength = ResourceLoader.Load'<Curve>("res://Resources/AxeThrowCurve.tres")
 
-    let max_throw_duration = 2.0f;
+    let max_throw_duration = 1.0f;
 
     let anim             = this.GetNode'<AnimationPlayer> "body/anim_body"
 
@@ -170,7 +170,7 @@ type PlayerFS() as this =
  
             axe_i.obj_type <- AXE
             axe_i.velocity <- (axe_spawn_pos.Value.GlobalPosition - aim_center.Value.GlobalPosition).Normalized()
-            axe_i.speed <- throw_strength.Value.Interpolate(throw_time/max_throw_duration) * 2700.0f + 550.0f 
+            axe_i.speed <- throw_strength.Value.Interpolate(throw_time/max_throw_duration) * 2900.0f + 750.0f 
             axe_i.Scale <- Vector2.One + Vector2.One * (throw_time/max_throw_duration)/5.0f
             axe_i.GetNode'<Sprite>("Sprite").Value.Texture <- ResourceLoader.Load'("res://Images/Weapon Charge/Axe.png").Value
             this.GetParent().AddChild(axe_i)

@@ -6,7 +6,8 @@
 [node name="Main" type="Node2D"]
 
 [node name="Menu" parent="." instance=ExtResource( 1 )]
-position = Vector2( -26.7949, -3.1791 )
+position = Vector2( -8.36853, -13.9476 )
+scale = Vector2( 1.00144, 0.995667 )
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
 stream = ExtResource( 2 )
