@@ -60,6 +60,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Scripts\FlyingObject.cs" />
     <Compile Include="Scripts\Player.cs" />
+    <Compile Include="Scripts\Server.cs" />
     <Compile Include="Scripts\ThrowingAxe.cs" />
   </ItemGroup>
   <ItemGroup>

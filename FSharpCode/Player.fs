@@ -61,8 +61,6 @@ type PlayerFS() as this =
     
     let has_limb x = List.contains x limbs
 
-    let optional = OptionalBuilder()
-    
     let free_hand() = 
         match (has_limb LH , has_limb RH, has_axe_l, has_axe_r) with
         | (true, _, false, _) -> Some(LH)

@@ -43,24 +43,8 @@ module Exts =
         member this.as_pickup =
           if this :? Pickup
           then Some(this :?> Pickup)
-          else None 
-[<Struct>]
-type OptionalBuilder =
-  member __.Bind(opt, binder) =
-    match opt with
-    | Some value -> binder value
-    | None -> None
-  member __.Return(value) =
-    Some value
-  member __.Zero() =
-    None
-  member __.Combine(a, b) = 
-    match a, b with 
-    | Some a', Some b' -> Some(a', b')
-    | Some a', None -> None
-    | None, Some b' -> None
-    | None, None -> None
-  member __.Delay(f) =
-    f()  
+          else None
 
-
+type Message =
+    | MovementDirection of Vector2
+    | PlayerPositions of Vector2 list

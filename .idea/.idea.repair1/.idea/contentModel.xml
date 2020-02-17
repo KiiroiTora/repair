@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ContentModelStore">
     <e p="$USER_HOME$/.Rider2019.2/system/extResources" t="IncludeRecursive" />
-    <e p="$USER_HOME$/.Rider2019.2/system/resharper-host/local/Transient/ReSharperHost/v192/SolutionCaches/_repair1.-947152579.00" t="ExcludeRecursive" />
-    <e p="$USER_HOME$/.Rider2019.2/system/rust_expanded_macros/swlGWlEO/expansions" t="IncludeRecursive" />
+    <e p="$USER_HOME$/.Rider2019.2/system/resharper-host/local/Transient/ReSharperHost/v192/SolutionCaches/_repair1.1392281186.00" t="ExcludeRecursive" />
+    <e p="$USER_HOME$/.Rider2019.2/system/rust_expanded_macros/aEMubIfS/expansions" t="IncludeRecursive" />
     <e p="$PROJECT_DIR$" t="IncludeRecursive">
       <e p=".mono/temp/bin" t="ExcludeRecursive" />
       <e p=".mono/temp/obj" t="ExcludeRecursive" />
@@ -12,6 +12,7 @@
         <e p="FSharpCode.fsproj" t="IncludeRecursive" />
         <e p="FlyingObject.fs" t="Include" />
         <e p="Library.fs" t="Include" />
+        <e p="Network.fs" t="Include" />
         <e p="Player.fs" t="Include" />
         <e p="Script.fsx" t="Include" />
         <e p="ThrowingAxeFs.fs" t="Include" />
@@ -26,6 +27,7 @@
       <e p="Scripts" t="Include">
         <e p="FlyingObject.cs" t="Include" />
         <e p="Player.cs" t="Include" />
+        <e p="Server.cs" t="Include" />
         <e p="ThrowingAxe.cs" t="Include" />
       </e>
       <e p="packages" t="ExcludeRecursive" />
