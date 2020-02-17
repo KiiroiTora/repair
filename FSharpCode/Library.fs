@@ -10,9 +10,6 @@ module Exts =
             this.PitchScale <- float32 <| GD.RandRange(0.9, 1.1)
             this.Play()
 
-    type Node with
-        member this.GetNode'<'a when 'a :> Node>(path: string) =
-            lazy (this.GetNode(new NodePath(path)) :?> 'a)
 
     type ResourceLoader with
         static member Load'<'a when 'a: not struct>(path: string) =
@@ -26,6 +23,10 @@ module Exts =
                    if dir < 0.0f
                     then Vector2(-abs (this.Scale.x), abs (this.Scale.y))
                     else this.Scale
+    type KinematicBody2D with 
+      member this.MoveAndCollide' relative_velocity= 
+        let coll = this.MoveAndCollide(relative_velocity)
+        if isNull coll then None else Some(coll)
     type Godot.Collections.Array with 
         member this.Empty() = this.Count > 0
         member this.PopFront() = 
@@ -36,6 +37,13 @@ module Exts =
     type Pickup() = 
       inherit KinematicBody2D()
       member val obj_type = H with get, set
+    type Node with
+        member this.GetNode'<'a when 'a :> Node>(path: string) =
+            lazy (this.GetNode(new NodePath(path)) :?> 'a)
+        member this.as_pickup =
+          if this :? Pickup
+          then Some(this :?> Pickup)
+          else None 
 [<Struct>]
 type OptionalBuilder =
   member __.Bind(opt, binder) =

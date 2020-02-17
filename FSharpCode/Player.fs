@@ -3,7 +3,7 @@ open Godot
 open Exts
 open Godot.Collections
 open ThrowingAxe
-
+open FSharpPlus
 
 type PlayerFS() as this =
     inherit KinematicBody2D()
@@ -63,6 +63,12 @@ type PlayerFS() as this =
 
     let optional = OptionalBuilder()
     
+    let free_hand() = 
+        match (has_limb LH , has_limb RH, has_axe_l, has_axe_r) with
+        | (true, _, false, _) -> Some(LH)
+        | (_, true, _, false) -> Some(RH)
+        | _ -> None
+
     override this._Ready() =
         body.Value.Texture <- ResourceLoader.Load("res://Images/Character V.3/P" + pid.ToString() + "/Torso.png")
         head.Value.Texture <- ResourceLoader.Load("res://Images/Character V.3/P" + pid.ToString() + "/Head.png")
@@ -175,13 +181,8 @@ type PlayerFS() as this =
 
 
     member this._on_area_pickup_area_entered(area: Area2D) =
-        optional {
-            let! obj = optional {
-                if area.GetParent() :? Pickup
-                then return (area.GetParent() :?> Pickup)
-                else None 
-            }
-
+        monad {
+            let! obj = area.GetParent().as_pickup
             let t = obj.obj_type
             GD.Print ("near ", t)
             obj.obj_type <- 
@@ -203,19 +204,11 @@ type PlayerFS() as this =
                 if t = AXE 
                 then
                     GD.Print "Near Axe"
-                        
-                    match (has_limb LH , has_limb RH, has_axe_l, has_axe_r) with
-                    | (true, _, false, _) -> obj.QueueFree()
-                    | (_, true, _, false) -> obj.QueueFree()
-                    | _ -> ()
-
-                    let (lv, rv) = 
-                        match (has_limb LH , has_limb RH, has_axe_l, has_axe_r) with
-                        | (true, _, false, _) -> (true, has_axe_r)
-                        | (_, true, _, false) -> (has_axe_l, true)
-                        | _ -> (has_axe_l, has_axe_r)
-                    has_axe_l <- lv
-                    has_axe_r <- rv
+                    let! f_hand = free_hand()
+                    obj.QueueFree()
+                    match f_hand with 
+                    | LH -> has_axe_l <- true
+                    | RH -> has_axe_r <- true
         } |> ignore
         ()
     member this._on_timer_win_timeout() =

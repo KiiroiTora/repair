@@ -2,7 +2,7 @@ module FSharpCode.FlyingObject
 
 open Godot
 open Exts
-
+open FSharpPlus
 type FlyingObjectFs() as this=
     inherit Pickup()
 
@@ -26,9 +26,10 @@ type FlyingObjectFs() as this=
             velocity <- Vector2.Zero
 
         else
-            let coll = this.MoveAndCollide <| velocity*delta*flying_curve.Value.Interpolate(elapsed/duration)
-            if not <| isNull coll then do
-                sprite.Value.Rotate(Mathf.Deg2Rad(rot_speed) * delta * flying_curve.Value.Interpolate(elapsed/duration)) 
+            monad {
+                let! coll = this.MoveAndCollide'(velocity*delta*flying_curve.Value.Interpolate(elapsed/duration))
+                sprite.Value.Rotate(Mathf.Deg2Rad(rot_speed) * delta * flying_curve.Value.Interpolate(elapsed/duration))
+            } |> ignore
         area.Value.SetDeferred("monitorable", (velocity = Vector2.Zero)) 
 
 
