@@ -4,7 +4,7 @@ open Godot
 open Exts
 
 type FlyingObjectFs() as this=
-    inherit KinematicBody2D()
+    inherit Pickup()
 
     let sprite = this.GetNode'<Sprite> "Sprite" 
     let area = this.GetNode'<Area2D> "Area2D"
@@ -17,7 +17,6 @@ type FlyingObjectFs() as this=
     let mutable velocity = Vector2.Zero 
     let mutable elapsed = 0.0f
     
-    member val obj_type = H with get, set
     override this._Ready() =
         velocity <- Vector2(float32 <| GD.RandRange(-1.0, 1.0), float32 <| GD.RandRange(-1.0, 1.0)).Normalized() * (float32 <| GD.RandRange(600.0, 900.0))
 

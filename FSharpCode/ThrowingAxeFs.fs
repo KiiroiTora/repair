@@ -4,7 +4,7 @@ open Godot
 open Exts
 
 type ThrowingAxeFs() as this=
-    inherit KinematicBody2D()
+    inherit Pickup()
     
     let pick_up = new Event<ObjectType>()
 
@@ -23,7 +23,6 @@ type ThrowingAxeFs() as this=
     member val velocity = Vector2.Zero with get, set
     member val speed = 600.0f with get, set
 
-    member val obj_type = ObjectType.AXE
     member this.can_pick_up () = elapsed >= duration.Value    
     member this.on_pick_up = pick_up.Publish
     override this._Process(delta) =

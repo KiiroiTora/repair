@@ -4,17 +4,6 @@ open Exts
 open Godot.Collections
 open ThrowingAxe
 
-type Pickup = Limb of FlyingObject.FlyingObjectFs | Axe of ThrowingAxeFs
-type Pickup with 
-    member x.obj_type = 
-        match x with
-        | (Limb(y)) -> (y.obj_type)
-        | (Axe(y)) -> (y.obj_type)
-    static member (<--) (x, z) = 
-        match x with
-        | (Limb(y)) -> y.obj_type <- z
-        | (Axe(y)) -> ()
-        | _ -> ()
 
 type PlayerFS() as this =
     inherit KinematicBody2D()
@@ -58,7 +47,6 @@ type PlayerFS() as this =
     let mutable limbs = [ LH; LL; RL; RH; H ]
 
     let speed = 350.0f
-
     let mutable velocity = Vector2.Zero
     let mutable throw_time = 0.0f
     let mutable has_axe_l = true
@@ -174,6 +162,7 @@ type PlayerFS() as this =
             aim_center.Value.LookAt(aim_center.Value.GlobalPosition + controller_dir())
             axe_i.GlobalPosition <- axe_spawn_pos.Value.GlobalPosition
  
+            axe_i.obj_type <- AXE
             axe_i.velocity <- (axe_spawn_pos.Value.GlobalPosition - aim_center.Value.GlobalPosition).Normalized()
             axe_i.speed <- throw_strength.Value.Interpolate(throw_time/max_throw_duration) * 2700.0f + 550.0f 
             axe_i.Scale <- Vector2.One + Vector2.One * (throw_time/max_throw_duration)/5.0f
@@ -188,15 +177,14 @@ type PlayerFS() as this =
     member this._on_area_pickup_area_entered(area: Area2D) =
         optional {
             let! obj = optional {
-                if area.GetParent() :? FlyingObject.FlyingObjectFs 
-                then return Limb(area.GetParent() :?> FlyingObject.FlyingObjectFs)
-                else 
-                    if area.GetParent() :? ThrowingAxeFs
-                    then return (Axe(area.GetParent() :?> ThrowingAxeFs))
+                if area.GetParent() :? Pickup
+                then return (area.GetParent() :?> Pickup)
+                else None 
             }
 
             let t = obj.obj_type
-            obj <-- 
+            GD.Print ("near ", t)
+            obj.obj_type <- 
                 match t with
                 | LH | RH when not (has_limb LH) -> LH
                 | LH | RH when not (has_limb RH) -> RH
@@ -210,23 +198,15 @@ type PlayerFS() as this =
             if (t <> AXE) && not <| has_limb (t) 
             then do
                 limbs <- t :: limbs
-                match obj with 
-                | Axe(x) -> x.QueueFree()
-                | Limb(x) -> x.QueueFree()
-                | _ -> ()
-
+                obj.QueueFree()
             else 
                 if t = AXE 
                 then
                     GD.Print "Near Axe"
-                    let destroy_axe () = 
-                        match obj with 
-                        | Axe(x) -> x.QueueFree()
-                        | Limb(x) -> x.QueueFree()
-
+                        
                     match (has_limb LH , has_limb RH, has_axe_l, has_axe_r) with
-                    | (true, _, false, _) -> destroy_axe () 
-                    | (_, true, _, false) -> destroy_axe ()
+                    | (true, _, false, _) -> obj.QueueFree()
+                    | (_, true, _, false) -> obj.QueueFree()
                     | _ -> ()
 
                     let (lv, rv) = 

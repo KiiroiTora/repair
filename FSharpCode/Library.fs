@@ -33,6 +33,9 @@ module Exts =
             this.RemoveAt 0
             ret
         member this.PushFront x = this.Insert(0, x)
+    type Pickup() = 
+      inherit KinematicBody2D()
+      member val obj_type = H with get, set
 [<Struct>]
 type OptionalBuilder =
   member __.Bind(opt, binder) =
@@ -51,23 +54,5 @@ type OptionalBuilder =
     | None, None -> None
   member __.Delay(f) =
     f()  
-
-type Part = {
-    Type: System.Type;
-    Format: int option;
-    Name: string;
-    Part: int16;
-    Number: float32;
-    FileName: string option
-}
-
-type PartResult = {
-    ty: System.Type;
-    format: string;
-    name: string;
-    part: int16;
-    number: float32;
-    fileName: string
-}
 
 
