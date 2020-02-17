@@ -8,14 +8,9 @@
 
 config_version=4
 
-_global_script_classes=[ {
-"base": "KinematicBody2D",
-"class": "ThrowingAxe",
-"language": "GDScript",
-"path": "res://Scripts/ThrowingAxe.gd"
-} ]
+_global_script_classes=[  ]
 _global_script_class_icons={
-"ThrowingAxe": ""
+
 }
 
 [application]
@@ -23,6 +18,10 @@ _global_script_class_icons={
 config/name="repair1"
 run/main_scene="res://Scenes/Main.tscn"
 config/icon="res://icon.png"
+
+[autoload]
+
+Client="*res://Scripts/Client.cs"
 
 [display]
 

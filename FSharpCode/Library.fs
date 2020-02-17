@@ -1,6 +1,8 @@
 ﻿namespace FSharpCode
 
+open System.Text
 open Godot
+open Newtonsoft.Json
 
 type ObjectType = LH | RH | RL | LL | H | AXE
 module Exts =
@@ -43,24 +45,38 @@ module Exts =
         member this.as_pickup =
           if this :? Pickup
           then Some(this :?> Pickup)
-          else None 
-[<Struct>]
-type OptionalBuilder =
-  member __.Bind(opt, binder) =
-    match opt with
-    | Some value -> binder value
-    | None -> None
-  member __.Return(value) =
-    Some value
-  member __.Zero() =
-    None
-  member __.Combine(a, b) = 
-    match a, b with 
-    | Some a', Some b' -> Some(a', b')
-    | Some a', None -> None
-    | None, Some b' -> None
-    | None, None -> None
-  member __.Delay(f) =
-    f()  
+          else None
+          
+type Message =
+    | MovementDirection of Vector2
+    | PlayerPositions of Vector2 list
 
-
+type WebSocketClient'(url : string) as this=
+    inherit WebSocketClient()
+    
+    do
+        this.ConnectToUrl url |> ignore
+        this.Connect("connection_established", this, "on_connected") |> ignore
+        this.Connect("data_received", this, "on_message") |> ignore
+    let mutable connected = false    
+    let _OnConnected = new Event<_>()
+    let _OnMessage   = new Event<Message>()
+    member val OnConnected = _OnConnected.Publish
+    member val OnMessage = _OnMessage.Publish
+    member this.on_connected(protocol: obj[]) =
+        connected <- true
+        _OnConnected.Trigger()
+    member this.on_message() = _OnMessage.Trigger(JsonConvert.DeserializeObject<Message>(Encoding.ASCII.GetString(this.GetPeer(1).GetPacket())))
+    member this.send (msg:Message) = if connected then do this.GetPeer(1).PutPacket(JsonConvert.SerializeObject(msg).ToAscii()) |> ignore
+        
+and ClientFs() =
+    inherit Node()
+    static member val ws = lazy (
+        GD.Print "Connecting"
+        let ret = new WebSocketClient'("ws://172.22.8.180:8080/lobby")
+        ret
+    )
+    
+    override this._Process(delta) =
+        ClientFs.ws.Value.Poll()
+        

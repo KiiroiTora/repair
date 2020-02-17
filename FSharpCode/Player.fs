@@ -61,8 +61,6 @@ type PlayerFS() as this =
     
     let has_limb x = List.contains x limbs
 
-    let optional = OptionalBuilder()
-    
     let free_hand() = 
         match (has_limb LH , has_limb RH, has_axe_l, has_axe_r) with
         | (true, _, false, _) -> Some(LH)
@@ -78,8 +76,8 @@ type PlayerFS() as this =
         ()
 
     override this._Process (delta) =
-
-
+        
+        
         let is_charging = pressed "throw" && (has_axe_l || has_axe_r)
         let is_charging_l = is_charging && has_axe_l
         let is_charging_r = is_charging && has_axe_r && not has_axe_l
