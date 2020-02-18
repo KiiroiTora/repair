@@ -6,7 +6,6 @@ open Newtonsoft.Json
 
 type ObjectType = LH | RH | RL | LL | H | AXE
 module Exts =
-
     type AudioStreamPlayer with
         member this.Play'() =
             this.PitchScale <- float32 <| GD.RandRange(0.9, 1.1)
