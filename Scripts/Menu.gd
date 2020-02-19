@@ -28,7 +28,7 @@ func _process(delta):
 	if Input.is_action_just_pressed("down1") or Input.is_action_just_pressed("down2"):
 		axe_cursor.position.y = quit_y
 		
-	if (Input.is_action_just_released("throw1") or Input.is_action_just_released("throw2")) and int(axe_cursor.position.y) == int(start_y):
+	if Input.is_action_just_pressed("ui_accept"):
 		anim.play("start")
 	elif Input.is_action_just_released("throw1") or Input.is_action_just_released("throw2"):
 		anim.play("quit")

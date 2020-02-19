@@ -1,4 +1,5 @@
-﻿namespace FSharpCode
+﻿
+namespace FSharpCode
 
 open Godot
 
@@ -44,7 +45,9 @@ module Exts =
           if this :? Pickup
           then Some(this :?> Pickup)
           else None
-
+          
+type Inputs = {controller_dir: Vector2; distance_to_mouse: float32; is_charging: bool; just_released: bool}
+type ServerState = { player_positions: Vector2 list;}
 type Message =
-    | MovementDirection of Vector2
-    | PlayerPositions of Vector2 list
+    | ClientInputs of Inputs
+    | ServerState of ServerState

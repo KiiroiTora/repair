@@ -21,16 +21,23 @@ type Lobby() =
         let e = (System.Text.Encoding.ASCII.GetString(e.RawData))
         
         match  JsonConvert.DeserializeObject<Message>(e) with
-        | MovementDirection(dir) ->
-//            Lobby.players.Item(this.ID).mouse_pos <- pos
-            this.SendAsync (JsonConvert.SerializeObject(PlayerPositions (List.map (fun (_ , x : PlayerFS) -> x.GlobalPosition) (Lobby.players.Iterator() |> List.ofSeq) ) )(*.ToAscii()*), null)
+        | ClientInputs(inps) ->
+            Lobby.players.Item(this.ID).mouse_distance <- inps.distance_to_mouse
+            Lobby.players.Item(this.ID).controller_dir <- inps.controller_dir
+            
+            this.send(ServerState({player_positions = (List.map (fun (_ , x : PlayerFS) -> x.GlobalPosition) (Lobby.players.Iterator() |> List.ofSeq)  )} )(*.ToAscii()*))
         | _ ->
             GD.Print "Other Message"
             ()
         
+    member this.send (msg: Message) =
+        this.SendAsync(JsonConvert.SerializeObject(msg), null)
         
-        
-        
+and LobbyFs() =
+    inherit Node2D()
+    override this._Ready() =
+        Lobby.free_players.Push(this.GetNode(new NodePath("Player2")):?>Player.PlayerFS)
+        Lobby.free_players.Push(this.GetNode(new NodePath("Player")):?>Player.PlayerFS)
 and ServerFs() =
     inherit Node()
     static member val ws = lazy (

@@ -2,9 +2,10 @@
 <project version="4">
   <component name="ContentModelStore">
     <e p="$USER_HOME$/.Rider2019.2/system/extResources" t="IncludeRecursive" />
-    <e p="$USER_HOME$/.Rider2019.2/system/resharper-host/local/Transient/ReSharperHost/v192/SolutionCaches/_repair1.1392281186.00" t="ExcludeRecursive" />
+    <e p="$USER_HOME$/.Rider2019.2/system/resharper-host/local/Transient/ReSharperHost/v192/SolutionCaches/_repair1.-722931248.00" t="ExcludeRecursive" />
     <e p="$USER_HOME$/.Rider2019.2/system/rust_expanded_macros/aEMubIfS/expansions" t="IncludeRecursive" />
     <e p="$PROJECT_DIR$" t="IncludeRecursive">
+      <e p=".gitignore" t="Include" />
       <e p=".mono/temp/bin" t="ExcludeRecursive" />
       <e p=".mono/temp/obj" t="ExcludeRecursive" />
       <e p="FSharpCode" t="IncludeRecursive">
@@ -23,7 +24,9 @@
       <e p="Properties" t="Include">
         <e p="AssemblyInfo.cs" t="Include" />
       </e>
-      <e p="Scenes" t="Include" />
+      <e p="Scenes" t="Include">
+        <e p="Lobby.cs" t="Include" />
+      </e>
       <e p="Scripts" t="Include">
         <e p="FlyingObject.cs" t="Include" />
         <e p="Player.cs" t="Include" />
