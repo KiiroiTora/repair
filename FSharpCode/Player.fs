@@ -50,6 +50,7 @@ type PlayerFS() as this =
     let max_speed = 300.0f
     let speed = max_speed 
     let mutable last_speed = speed
+    let mutable acceleration_sign = 1.0f
     let mutable velocity = Vector2.Zero
     let mutable throw_time = 0.0f
     let mutable has_axe_l = true
@@ -81,15 +82,26 @@ type PlayerFS() as this =
         l_leg.Value.Texture <- ResourceLoader.Load("res://Images/Character V.3/P" + pid.ToString() + "/L_Leg.png")
         r_leg.Value.Texture <- ResourceLoader.Load("res://Images/Character V.3/P" + pid.ToString() + "/R_Leg.png")
         GD.Randomize()
+        ClientFs.ws.Value.OnMessage
+        |> Event.add (
+            fun msg -> 
+                match msg with 
+                | ServerState(sstate) -> 
+                    monad{
+                        let mpos = List.tryItem (pid-1) sstate.player_positions
+                        let! pos = mpos
+                        this.GlobalPosition <- pos
+                    } |> ignore
+                | _ -> ()
+        
+        )
         ()
 
     override this._Process (delta) =
         
-        
         let is_charging = pressed "throw" && (has_axe_l || has_axe_r)
         
         //ClientFs.ws.Value.Send(ClientInputs({controller_dir = controller_dir(), is_charging = is_charging, just_released = just_released "throw"}))
-        let acceleration_sign = sign acceleration
 
         let is_charging_l = is_charging && has_axe_l
         let is_charging_r = is_charging && has_axe_r && not has_axe_l
@@ -105,6 +117,7 @@ type PlayerFS() as this =
                       )
         let speed = speed * (if (mouse_distance() > 50.f) then 1.0f else moving_curve.Value.Interpolate((acceleration_sign * (50.f - mouse_distance())) / 100.f + 0.5f) )
         let acceleration = (speed - last_speed)/delta
+        acceleration_sign <- sign acceleration
         last_speed <- speed
 
         if (just_pressed "restart") then do this.GetTree().ReloadCurrentScene() |> ignore
@@ -137,6 +150,17 @@ type PlayerFS() as this =
 
         l_axe.Value.Visible <- has_axe_l
         r_axe.Value.Visible <- has_axe_r
+        ClientFs.ws.Value.send(
+            ClientInputs(
+                {
+                    controller_dir = controller_dir();
+                    distance_to_mouse = mouse_distance();
+                    is_charging = is_charging;
+                    just_released = just_released "throw";
+                }
+
+            )
+        )
 
     member this.slice() = 
         if not (limbs.IsEmpty) then do

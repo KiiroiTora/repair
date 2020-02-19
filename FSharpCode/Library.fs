@@ -51,10 +51,11 @@ module Exts =
 
 
 
-type Inputs = {controller_dir: Vector2; is_charging: bool; just_released: bool}
+type Inputs = {controller_dir: Vector2; distance_to_mouse: float32; is_charging: bool; just_released: bool}
+type ServerState = { player_positions: Vector2 list;}
 type Message =
     | ClientInputs of Inputs
-    | PlayerPositions of Vector2 list
+    | ServerState of ServerState
 
 type WebSocketClient'(url : string) as this=
     inherit WebSocketClient()
@@ -78,7 +79,7 @@ and ClientFs() =
     inherit Node()
     static member val ws = lazy (
         GD.Print "Connecting"
-        let ret = new WebSocketClient'("ws://172.22.8.180:8080/lobby")
+        let ret = new WebSocketClient'("ws://172.22.67.84:8080/lobby")
         ret
     )
     
