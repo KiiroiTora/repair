@@ -22,10 +22,11 @@ func _ready():
 
 func _process(delta):
 	
-	if Input.is_action_just_pressed("up1") or Input.is_action_just_pressed("up2"):
+	if get_global_mouse_position().y < (start_y + quit_y)/2:
 		axe_cursor.position.y = start_y
 		
-	if Input.is_action_just_pressed("down1") or Input.is_action_just_pressed("down2"):
+	if get_global_mouse_position().y >= (start_y + quit_y)/2:
+
 		axe_cursor.position.y = quit_y
 		
 	if (Input.is_action_just_released("throw1") or Input.is_action_just_released("throw2")) and int(axe_cursor.position.y) == int(start_y):

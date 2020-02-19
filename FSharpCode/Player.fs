@@ -4,13 +4,14 @@ open Exts
 open Godot.Collections
 open ThrowingAxe
 open FSharpPlus
-
+open System
 type PlayerFS() as this =
     inherit KinematicBody2D()
 
     [<Export>]
     let pid = 1
 
+    let moving_curve = ResourceLoader.Load'<Curve>("res://Resources/WalkCurve.tres")
     let throw_strength = ResourceLoader.Load'<Curve>("res://Resources/AxeThrowCurve.tres")
 
     let max_throw_duration = 1.0f;
@@ -46,18 +47,25 @@ type PlayerFS() as this =
 
     let mutable limbs = [ LH; LL; RL; RH; H ]
 
-    let speed = 350.0f
+    let max_speed = 300.0f
+    let speed = max_speed 
+    let mutable last_speed = speed
     let mutable velocity = Vector2.Zero
     let mutable throw_time = 0.0f
     let mutable has_axe_l = true
     let mutable has_axe_r = true
     
-    
+    let sign x = if x >= 0.0f then 1.0f else -1.0f
+    let mouse_distance() = (this.GetGlobalMousePosition() - this.GlobalPosition).Length()
     let just_pressed s       = Input.IsActionJustPressed s
     let pressed s            = Input.IsActionPressed(s + pid.ToString())
     let just_released s      = Input.IsActionJustReleased(s + pid.ToString())
     let action_strength s    = Input.GetActionStrength(s + pid.ToString())
-    let controller_dir()     = Vector2(action_strength "right" - action_strength "left", action_strength "down" - action_strength "up")
+    let controller_dir()     = 
+        if ((this.GetGlobalMousePosition() - this.GlobalPosition).Length() > 1.0f) 
+        then (this.GetGlobalMousePosition() - this.GlobalPosition).Normalized() 
+        else Vector2.Zero//(this.GetGlobalMousePosition() - this.GlobalPosition) // modified
+    //let controller_dir()     = Vector2(action_strength "right" - action_strength "left", action_strength "down" - action_strength "up")
     
     let has_limb x = List.contains x limbs
 
@@ -79,6 +87,10 @@ type PlayerFS() as this =
         
         
         let is_charging = pressed "throw" && (has_axe_l || has_axe_r)
+        
+        //ClientFs.ws.Value.Send(ClientInputs({controller_dir = controller_dir(), is_charging = is_charging, just_released = just_released "throw"}))
+        let acceleration_sign = sign acceleration
+
         let is_charging_l = is_charging && has_axe_l
         let is_charging_r = is_charging && has_axe_r && not has_axe_l
         let is_running = pressed "run"
@@ -91,6 +103,9 @@ type PlayerFS() as this =
                                else speed / 4.0f
                            )
                       )
+        let speed = speed * (if (mouse_distance() > 50.f) then 1.0f else moving_curve.Value.Interpolate((acceleration_sign * (50.f - mouse_distance())) / 100.f + 0.5f) )
+        let acceleration = (speed - last_speed)/delta
+        last_speed <- speed
 
         if (just_pressed "restart") then do this.GetTree().ReloadCurrentScene() |> ignore
 
@@ -99,8 +114,7 @@ type PlayerFS() as this =
         if just_released "throw" then do this.throw()
 
         velocity <- if not is_charging then this.MoveAndSlide <| controller_dir() * speed else Vector2.Zero
-
-        anim.Value.PlaybackSpeed <- if is_running then 4.0f else 2.0f
+        anim.Value.PlaybackSpeed <- acceleration_sign * ((4.0f* speed) / (2.5f * max_speed)) 
 
         throw_time <- if is_charging then Mathf.Clamp(throw_time + delta, 0.0f, max_throw_duration) else 0.0f
 
@@ -113,6 +127,7 @@ type PlayerFS() as this =
         r_axe.Value.Scale <- if not is_charging_r then Vector2.One else Vector2.One * ((throw_time / max_throw_duration) / 5.0f) + Vector2.One
 
         this.GetNode'<Sprite>("shadow").Value.Position <- Vector2(this.GetNode'<Sprite>("shadow").Value.Position.x , if List.contains LL limbs || List.contains RL limbs then 137.669f else 60.0f)
+        
         body.Value.XFlipDir <| controller_dir().x
 
         anim.Value.Play (if not is_charging then (if velocity.Length() = 0.0f then "idle" else "walk") else ("swing" + (if has_axe_l then "l" else "r")))

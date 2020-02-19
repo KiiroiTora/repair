@@ -1,2 +1,2 @@
-﻿33273
-/home/vankata/Programs/Godot_v3.2-stable_mono_x11_64/Godot_v3.2-stable_mono_x11.64
+﻿57711
+D:\GoDot\Godot_v3.2-stable_mono_win64\Godot_v3.2-stable_mono_win64.exe

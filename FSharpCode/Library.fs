@@ -45,9 +45,15 @@ module Exts =
           if this :? Pickup
           then Some(this :?> Pickup)
           else None
-          
+
+
+
+
+
+
+type Inputs = {controller_dir: Vector2; is_charging: bool; just_released: bool}
 type Message =
-    | MovementDirection of Vector2
+    | ClientInputs of Inputs
     | PlayerPositions of Vector2 list
 
 type WebSocketClient'(url : string) as this=

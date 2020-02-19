@@ -26,3 +26,5 @@
 /home/vankata/Documents/Godot/reckless_sharp/.mono/temp/bin/Debug/tr/FSharp.Core.resources.dll
 /home/vankata/Documents/Godot/reckless_sharp/.mono/temp/bin/Debug/pt-BR/FSharp.Core.resources.dll
 /home/vankata/Documents/Godot/reckless_sharp/.mono/temp/obj/Debug/repair1.csproj.CopyComplete
+d:\Programe\rekless_client\repair\.mono\temp\obj\Debug\repair1.dll
+d:\Programe\rekless_client\repair\.mono\temp\obj\Debug\repair1.pdb
