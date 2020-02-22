@@ -15,7 +15,7 @@ const quit_y := 593.583
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	
+	anim.play("start")
 	axe_cursor.position.x = start_x
 	axe_cursor.position.y = start_y
 
