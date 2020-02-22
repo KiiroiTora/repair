@@ -36,6 +36,10 @@
           <HintPath>..\packages\FSharp.Core.4.6.2\lib\net45\FSharp.Core.dll</HintPath>
           <Private>True</Private>
         </Reference>
+        <Reference Include="FSharp.Data, Version=3.3.3.0, Culture=neutral, PublicKeyToken=null">
+          <HintPath>..\packages\FSharp.Data.3.3.3\lib\net45\FSharp.Data.dll</HintPath>
+          <Private>True</Private>
+        </Reference>
         <Reference Include="FSharpPlus, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
           <HintPath>..\packages\FSharpPlus.1.1.0-RC2\lib\net45\FSharpPlus.dll</HintPath>
           <Private>True</Private>
@@ -55,6 +59,7 @@
           <HintPath>..\packages\System.ValueTuple.4.4.0\lib\netstandard1.0\System.ValueTuple.dll</HintPath>
           <Private>True</Private>
         </Reference>
+        <Reference Include="System.Xml.Linq" />
         <Reference Include="websocket-sharp, Version=1.0.2.59611, Culture=neutral, PublicKeyToken=5660b08a1845a91e">
           <HintPath>..\packages\WebSocketSharp.1.0.3-rc11\lib\websocket-sharp.dll</HintPath>
           <Private>True</Private>

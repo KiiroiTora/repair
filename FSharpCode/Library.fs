@@ -3,6 +3,7 @@
 open System.Text
 open Godot
 open Newtonsoft.Json
+open FSharp.Data
 
 type ObjectType = LH | RH | RL | LL | H | AXE
 module Exts =
@@ -75,12 +76,12 @@ type WebSocketClient'(url : string) as this=
         _OnConnected.Trigger()
     member this.on_message() = _OnMessage.Trigger(JsonConvert.DeserializeObject<Message>(Encoding.ASCII.GetString(this.GetPeer(1).GetPacket())))
     member this.send (msg:Message) = if connected then do this.GetPeer(1).PutPacket(JsonConvert.SerializeObject(msg).ToAscii()) |> ignore
-        
+
 and ClientFs() =
     inherit Node()
     static member val ws = lazy (
         GD.Print "Connecting"
-        let ret = new WebSocketClient'("ws://192.168.0.14:8080/lobby")
+        let ret = new WebSocketClient'("ws://35.214.86.28:8080/lobby")
         ret
     )
     
