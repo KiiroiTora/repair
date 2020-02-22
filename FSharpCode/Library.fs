@@ -46,8 +46,9 @@ module Exts =
           then Some(this :?> Pickup)
           else None
           
-type Inputs = {controller_dir: Vector2; distance_to_mouse: float32; is_charging: bool; just_released: bool}
-type ServerState = { player_positions: Vector2 list;}
+type Inputs = {mouse_pos: Vector2; is_charge_pressed: bool; is_charge_just_released: bool; is_run_pressed: bool;}
+type Overrides = {player_position: Vector2 }
+type ServerState = (Inputs * Overrides) list
 type Message =
     | ClientInputs of Inputs
     | ServerState of ServerState
