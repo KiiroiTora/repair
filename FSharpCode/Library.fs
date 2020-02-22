@@ -86,6 +86,7 @@ and ClientFs() =
     )
     
     override this._Process(delta) =
+        Http.RequestString
         ClientFs.ws.Value.Poll()
         
         
