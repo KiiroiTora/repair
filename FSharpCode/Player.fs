@@ -56,6 +56,8 @@ type PlayerFS() as this =
     let mutable has_axe_l = true
     let mutable has_axe_r = true
     
+//    let client_state : Inputs = 
+    
     let sign x = if x >= 0.0f then 1.0f else -1.0f
     let mouse_distance() = (this.GetGlobalMousePosition() - this.GlobalPosition).Length()
     let just_pressed s       = Input.IsActionJustPressed s
@@ -88,9 +90,8 @@ type PlayerFS() as this =
                 match msg with 
                 | ServerState(sstate) -> 
                     monad{
-                        let mpos = List.tryItem (pid-1) sstate.player_positions
-                        let! pos = mpos
-                        this.GlobalPosition <- pos
+                        let! (cs, so) = List.tryItem (pid-1) sstate
+                        this.GlobalPosition <- so.player_position
                     } |> ignore
                 | _ -> ()
         
@@ -101,8 +102,6 @@ type PlayerFS() as this =
         
         let is_charging = pressed "throw" && (has_axe_l || has_axe_r)
         
-        //ClientFs.ws.Value.Send(ClientInputs({controller_dir = controller_dir(), is_charging = is_charging, just_released = just_released "throw"}))
-
         let is_charging_l = is_charging && has_axe_l
         let is_charging_r = is_charging && has_axe_r && not has_axe_l
         let is_running = pressed "run"
@@ -141,7 +140,7 @@ type PlayerFS() as this =
 
         this.GetNode'<Sprite>("shadow").Value.Position <- Vector2(this.GetNode'<Sprite>("shadow").Value.Position.x , if List.contains LL limbs || List.contains RL limbs then 137.669f else 60.0f)
         
-        body.Value.XFlipDir <| controller_dir().x
+        body.Value.XFlipDir <| velocity.x
 
         anim.Value.Play (if not is_charging then (if velocity.Length() = 0.0f then "idle" else "walk") else ("swing" + (if has_axe_l then "l" else "r")))
 
@@ -153,10 +152,10 @@ type PlayerFS() as this =
         ClientFs.ws.Value.send(
             ClientInputs(
                 {
-                    controller_dir = controller_dir();
-                    distance_to_mouse = mouse_distance();
-                    is_charging = is_charging;
-                    just_released = just_released "throw";
+                    mouse_pos = this.GetGlobalMousePosition()
+                    is_charge_pressed = pressed "throw";
+                    is_charge_just_released = just_released "throw";
+                    is_run_pressed = pressed "run";
                 }
 
             )

@@ -51,8 +51,9 @@ module Exts =
 
 
 
-type Inputs = {controller_dir: Vector2; distance_to_mouse: float32; is_charging: bool; just_released: bool}
-type ServerState = { player_positions: Vector2 list;}
+type Inputs = {mouse_pos: Vector2; is_charge_pressed: bool; is_charge_just_released: bool; is_run_pressed: bool;}
+type Overrides = {player_position: Vector2 }
+type ServerState = (Inputs * Overrides) list
 type Message =
     | ClientInputs of Inputs
     | ServerState of ServerState
@@ -79,10 +80,11 @@ and ClientFs() =
     inherit Node()
     static member val ws = lazy (
         GD.Print "Connecting"
-        let ret = new WebSocketClient'("ws://172.22.67.84:8080/lobby")
+        let ret = new WebSocketClient'("ws://192.168.0.14:8080/lobby")
         ret
     )
     
     override this._Process(delta) =
         ClientFs.ws.Value.Poll()
+        
         
