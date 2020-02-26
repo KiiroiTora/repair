@@ -46,6 +46,12 @@ module Exts =
           if this :? Pickup
           then Some(this :?> Pickup)
           else None
+module Seq =
+    let fromGDArray (xs:Collections.Array) = 
+        seq {
+            for x in xs do
+                yield x
+            } 
 
 
 
@@ -53,8 +59,7 @@ module Exts =
 
 
 type Inputs = {mouse_pos: Vector2; is_charge_pressed: bool; is_charge_just_released: bool; is_run_pressed: bool;}
-type Overrides = {player_position: Vector2 }
-type ServerState = (Inputs * Overrides) list
+type ServerState = (Inputs list) * float32
 type Message =
     | ClientInputs of Inputs
     | ServerState of ServerState
@@ -77,16 +82,3 @@ type WebSocketClient'(url : string) as this=
     member this.on_message() = _OnMessage.Trigger(JsonConvert.DeserializeObject<Message>(Encoding.ASCII.GetString(this.GetPeer(1).GetPacket())))
     member this.send (msg:Message) = if connected then do this.GetPeer(1).PutPacket(JsonConvert.SerializeObject(msg).ToAscii()) |> ignore
 
-and ClientFs() =
-    inherit Node()
-    static member val ws = lazy (
-        GD.Print "Connecting"
-        let ret = new WebSocketClient'("ws://35.214.86.28:8080/lobby")
-        ret
-    )
-    
-    override this._Process(delta) =
-        Http.RequestString
-        ClientFs.ws.Value.Poll()
-        
-        

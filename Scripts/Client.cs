@@ -2,6 +2,6 @@ using Godot;
 using System;
 using FSharpCode;
 
-public class Client : ClientFs
+public class Client : Network.ClientFs
 {
 }

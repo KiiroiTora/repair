@@ -66,14 +66,11 @@ D:/Programe/rekless_client/repair/.mono/temp/obj/Tools/repair1.csproj.CopyComple
 /home/vankata/Documents/Godot/reckless_multiplayer/client/.mono/temp/bin/Tools/FSharp.Core.dll
 /home/vankata/Documents/Godot/reckless_multiplayer/client/.mono/temp/bin/Tools/FSharpPlus.dll
 /home/vankata/Documents/Godot/reckless_multiplayer/client/.mono/temp/bin/Tools/Newtonsoft.Json.dll
-/home/vankata/Documents/Godot/reckless_multiplayer/client/.mono/temp/bin/Tools/FSharp.Data.dll
 /home/vankata/Documents/Godot/reckless_multiplayer/client/.mono/temp/bin/Tools/FSharpCode.pdb
 /home/vankata/Documents/Godot/reckless_multiplayer/client/.mono/temp/bin/Tools/websocket-sharp.xml
 /home/vankata/Documents/Godot/reckless_multiplayer/client/.mono/temp/bin/Tools/FSharp.Core.xml
 /home/vankata/Documents/Godot/reckless_multiplayer/client/.mono/temp/bin/Tools/FSharpPlus.xml
 /home/vankata/Documents/Godot/reckless_multiplayer/client/.mono/temp/bin/Tools/Newtonsoft.Json.xml
-/home/vankata/Documents/Godot/reckless_multiplayer/client/.mono/temp/bin/Tools/FSharp.Data.pdb
-/home/vankata/Documents/Godot/reckless_multiplayer/client/.mono/temp/bin/Tools/FSharp.Data.xml
 /home/vankata/Documents/Godot/reckless_multiplayer/client/.mono/temp/bin/Tools/de/FSharp.Core.resources.dll
 /home/vankata/Documents/Godot/reckless_multiplayer/client/.mono/temp/bin/Tools/es/FSharp.Core.resources.dll
 /home/vankata/Documents/Godot/reckless_multiplayer/client/.mono/temp/bin/Tools/zh-Hans/FSharp.Core.resources.dll

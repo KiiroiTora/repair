@@ -13,6 +13,7 @@
         <e p="FSharpCode.fsproj" t="IncludeRecursive" />
         <e p="FlyingObject.fs" t="Include" />
         <e p="Library.fs" t="Include" />
+        <e p="Network.fs" t="Include" />
         <e p="Player.fs" t="Include" />
         <e p="Script.fsx" t="Include" />
         <e p="ThrowingAxeFs.fs" t="Include" />

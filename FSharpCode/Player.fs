@@ -60,15 +60,8 @@ type PlayerFS() as this =
     
     let sign x = if x >= 0.0f then 1.0f else -1.0f
     let mouse_distance() = (this.GetGlobalMousePosition() - this.GlobalPosition).Length()
-    let just_pressed s       = Input.IsActionJustPressed s
-    let pressed s            = Input.IsActionPressed(s + pid.ToString())
-    let just_released s      = Input.IsActionJustReleased(s + pid.ToString())
-    let action_strength s    = Input.GetActionStrength(s + pid.ToString())
-    let controller_dir()     = 
-        if ((this.GetGlobalMousePosition() - this.GlobalPosition).Length() > 1.0f) 
-        then (this.GetGlobalMousePosition() - this.GlobalPosition).Normalized() 
-        else Vector2.Zero//(this.GetGlobalMousePosition() - this.GlobalPosition) // modified
-    //let controller_dir()     = Vector2(action_strength "right" - action_strength "left", action_strength "down" - action_strength "up")
+    
+    
     
     let has_limb x = List.contains x limbs
 
@@ -78,33 +71,31 @@ type PlayerFS() as this =
         | (_, true, _, false) -> Some(RH)
         | _ -> None
 
+    member val inputs = ({
+        mouse_pos = this.GetGlobalMousePosition();
+        is_charge_pressed = Input.IsActionPressed "charge1";
+        is_charge_just_released = Input.IsActionJustPressed "charge1";
+        is_run_pressed = Input.IsActionPressed "run1";
+    }) with get, set
+    
+    member this.controller_dir() = this.GlobalPosition.DirectionTo this.inputs.mouse_pos
+    
     override this._Ready() =
         body.Value.Texture <- ResourceLoader.Load("res://Images/Character V.3/P" + pid.ToString() + "/Torso.png")
         head.Value.Texture <- ResourceLoader.Load("res://Images/Character V.3/P" + pid.ToString() + "/Head.png")
         l_leg.Value.Texture <- ResourceLoader.Load("res://Images/Character V.3/P" + pid.ToString() + "/L_Leg.png")
         r_leg.Value.Texture <- ResourceLoader.Load("res://Images/Character V.3/P" + pid.ToString() + "/R_Leg.png")
-        GD.Randomize()
-        ClientFs.ws.Value.OnMessage
-        |> Event.add (
-            fun msg -> 
-                match msg with 
-                | ServerState(sstate) -> 
-                    monad{
-                        let! (cs, so) = List.tryItem (pid-1) sstate
-                        this.GlobalPosition <- so.player_position
-                    } |> ignore
-                | _ -> ()
-        
-        )
+        this.AddToGroup "lockstep"
+        this.SetProcess false
         ()
-
+    
     override this._Process (delta) =
         
-        let is_charging = pressed "throw" && (has_axe_l || has_axe_r)
+        let is_charging = this.inputs.is_charge_pressed && (has_axe_l || has_axe_r)
         
         let is_charging_l = is_charging && has_axe_l
         let is_charging_r = is_charging && has_axe_r && not has_axe_l
-        let is_running = pressed "run"
+        let is_running = this.inputs.is_run_pressed
         let speed = ( if is_running then 2.5f else 1.0f ) *
                     ( if  has_limb LL && has_limb RL
                       then speed
@@ -119,13 +110,13 @@ type PlayerFS() as this =
         acceleration_sign <- sign acceleration
         last_speed <- speed
 
-        if (just_pressed "restart") then do this.GetTree().ReloadCurrentScene() |> ignore
+//        if (just_pressed "restart") then do this.GetTree().ReloadCurrentScene() |> ignore
 
         for b_part in body_parts.Keys do body_parts.Item(b_part).Value.Visible <- has_limb b_part
 
-        if just_released "throw" then do this.throw()
+        if this.inputs.is_charge_just_released then do this.throw()
 
-        velocity <- if not is_charging then this.MoveAndSlide <| controller_dir() * speed else Vector2.Zero
+        velocity <- if not is_charging then this.MoveAndSlide <| this.controller_dir() * speed else Vector2.Zero
         anim.Value.PlaybackSpeed <- acceleration_sign * ((4.0f* speed) / (2.5f * max_speed)) 
 
         throw_time <- if is_charging then Mathf.Clamp(throw_time + delta, 0.0f, max_throw_duration) else 0.0f
@@ -144,22 +135,11 @@ type PlayerFS() as this =
 
         anim.Value.Play (if not is_charging then (if velocity.Length() = 0.0f then "idle" else "walk") else ("swing" + (if has_axe_l then "l" else "r")))
 
-        if is_charging_l then do l_hand.Value.LookAt(controller_dir().Rotated(Mathf.Deg2Rad(-150.0f)) - l_hand.Value.GlobalPosition)
-        if is_charging_r then do r_hand.Value.LookAt(controller_dir().Rotated(Mathf.Deg2Rad(-150.0f)) - r_hand.Value.GlobalPosition)
+        if is_charging_l then do l_hand.Value.LookAt(this.controller_dir().Rotated(Mathf.Deg2Rad(-150.0f)) - l_hand.Value.GlobalPosition)
+        if is_charging_r then do r_hand.Value.LookAt(this.controller_dir().Rotated(Mathf.Deg2Rad(-150.0f)) - r_hand.Value.GlobalPosition)
 
         l_axe.Value.Visible <- has_axe_l
         r_axe.Value.Visible <- has_axe_r
-        ClientFs.ws.Value.send(
-            ClientInputs(
-                {
-                    mouse_pos = this.GetGlobalMousePosition()
-                    is_charge_pressed = pressed "throw";
-                    is_charge_just_released = just_released "throw";
-                    is_run_pressed = pressed "run";
-                }
-
-            )
-        )
 
     member this.slice() = 
         if not (limbs.IsEmpty) then do
@@ -201,7 +181,7 @@ type PlayerFS() as this =
             has_axe_l <- if has_axe_l then false else has_axe_l
             audio_throw.Value.Play'()
             let axe_i = throwing_axe_scene.Value.Instance() :?> ThrowingAxeFs
-            aim_center.Value.LookAt(aim_center.Value.GlobalPosition + controller_dir())
+            aim_center.Value.LookAt(aim_center.Value.GlobalPosition + this.controller_dir())
             axe_i.GlobalPosition <- axe_spawn_pos.Value.GlobalPosition
  
             axe_i.obj_type <- AXE
