@@ -47,8 +47,7 @@ module Exts =
           else None
           
 type Inputs = {mouse_pos: Vector2; is_charge_pressed: bool; is_charge_just_released: bool; is_run_pressed: bool;}
-type Overrides = {player_position: Vector2 }
-type ServerState = (Inputs * Overrides) list
+type ServerState = (Inputs list) * float32
 type Message =
     | ClientInputs of Inputs
     | ServerState of ServerState

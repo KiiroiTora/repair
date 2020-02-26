@@ -1,4 +1,5 @@
 module FSharpCode.Network
+open System
 open Godot
 open WebSocketSharp.Server
 open FSharpx.Collections
@@ -8,13 +9,11 @@ open FSharpCode.Player
 type Lobby() =
     inherit WebSocketBehavior()
     
-    static member val free_players = System.Collections.Generic.Stack<PlayerFS>() with get, set
-    static member val players = PersistentHashMap.empty with get, set
+    static member val playerinputs = PersistentHashMap.empty with get, set 
     
     override this.OnOpen() =
-        Lobby.players<- Lobby.players.Add(this.ID, Lobby.free_players.Pop())
         GD.Print "Someone connected"
-        GD.Print Lobby.players
+        Lobby.playerinputs <- Lobby.playerinputs.Add(this.ID, None)
         ()
     
     override this.OnMessage(e) =
@@ -22,21 +21,24 @@ type Lobby() =
         
         match  JsonConvert.DeserializeObject<Message>(e) with
         | ClientInputs(inps) ->
-            Lobby.players.Item(this.ID).client_state <- inps
+            Lobby.playerinputs <- Lobby.playerinputs.Add(this.ID, Some(inps))
+            let all_inps = Seq.map snd (Lobby.playerinputs.Iterator())
             
-            this.send(ServerState((List.map (fun (_ , x : PlayerFS) -> (x.client_state, {player_position = x.GlobalPosition})) (Lobby.players.Iterator() |> List.ofSeq)  ) )(*.ToAscii()*))
+            if (Seq.forall Option.isSome all_inps) then do
+                GD.Print "Sending"
+                this.broadcast(ServerState(all_inps |> Seq.choose id |>Seq.toList, float32(DateTime.Now.Millisecond)/1000.0f)(*.ToAscii()*))
+                Lobby.playerinputs <- Lobby.playerinputs |> PersistentHashMap.map (fun x -> None)
         | _ ->
             GD.Print "Other Message"
             ()
         
     member this.send (msg: Message) =
         this.SendAsync(JsonConvert.SerializeObject(msg), null)
+    member this.broadcast (msg: Message) =
+        this.Sessions.BroadcastAsync(JsonConvert.SerializeObject(msg), null)
         
 and LobbyFs() =
     inherit Node2D()
-    override this._Ready() =
-        Lobby.free_players.Push(this.GetNode(new NodePath("Player")):?>Player.PlayerFS)
-        Lobby.free_players.Push(this.GetNode(new NodePath("Player2")):?>Player.PlayerFS)
 and ServerFs() =
     inherit Node()
     static member val ws = lazy (

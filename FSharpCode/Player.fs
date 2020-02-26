@@ -82,7 +82,6 @@ type PlayerFS() as this =
         head.Value.Texture <- ResourceLoader.Load("res://Images/Character V.3/P" + pid.ToString() + "/Head.png")
         l_leg.Value.Texture <- ResourceLoader.Load("res://Images/Character V.3/P" + pid.ToString() + "/L_Leg.png")
         r_leg.Value.Texture <- ResourceLoader.Load("res://Images/Character V.3/P" + pid.ToString() + "/R_Leg.png")
-        GD.Randomize()
         ()
 
     override this._Process (delta) =
