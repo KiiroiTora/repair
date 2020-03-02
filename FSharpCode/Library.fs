@@ -1,6 +1,7 @@
 ﻿
 namespace FSharpCode
 
+open System
 open Godot
 
 type ObjectType = LH | RH | RL | LL | H | AXE
@@ -47,7 +48,7 @@ module Exts =
           else None
           
 type Inputs = {mouse_pos: Vector2; is_charge_pressed: bool; is_charge_just_released: bool; is_run_pressed: bool;}
-type ServerState = (Inputs list) * float32
+type ServerState = (Inputs list) * DateTime
 type Message =
     | ClientInputs of Inputs
     | ServerState of ServerState
