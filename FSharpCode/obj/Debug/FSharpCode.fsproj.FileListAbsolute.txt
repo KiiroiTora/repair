@@ -95,3 +95,6 @@ D:/Programe/rekless_client/repair/FSharpCode/obj/Debug/FSharpCode.pdb
 /home/vankata/Documents/Godot/reckless_multiplayer/client/FSharpCode/bin/Debug/tr/FSharp.Core.resources.dll
 /home/vankata/Documents/Godot/reckless_multiplayer/client/FSharpCode/bin/Debug/pt-BR/FSharp.Core.resources.dll
 /home/vankata/Documents/Godot/reckless_multiplayer/client/FSharpCode/obj/Debug/FSharpCode.fsproj.CopyComplete
+/home/vankata/Documents/Godot/reckless_multiplayer/client/FSharpCode/bin/Debug/FSharpx.Collections.dll
+/home/vankata/Documents/Godot/reckless_multiplayer/client/FSharpCode/bin/Debug/FSharpx.Collections.pdb
+/home/vankata/Documents/Godot/reckless_multiplayer/client/FSharpCode/bin/Debug/FSharpx.Collections.xml

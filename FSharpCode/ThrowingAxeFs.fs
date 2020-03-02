@@ -2,6 +2,7 @@ module FSharpCode.ThrowingAxe
 
 open Godot
 open Exts
+open Godot
 
 type ThrowingAxeFs() as this=
     inherit Pickup()
@@ -25,28 +26,42 @@ type ThrowingAxeFs() as this=
 
     member this.can_pick_up () = elapsed >= duration.Value    
     member this.on_pick_up = pick_up.Publish
-    override this._Process(delta) =
-        elapsed <- elapsed + delta
-        this.velocity <- 
-            if elapsed >= duration.Value 
-            then Vector2.Zero 
-            else 
-                let coll = this.MoveAndCollide(this.velocity * this.speed * delta * flying_curve.Interpolate(elapsed/duration.Value))
-                sprite.Value.Rotate <| Mathf.Deg2Rad(rot_speed.Value) * delta * flying_curve.Interpolate(elapsed/duration.Value)
-                if not (coll = null)
-                then 
-                    impact_sound.Value.Play'()
-                    this.velocity.Bounce(coll.Normal)
-                else
-                    this.velocity
+    override this._Ready() =
+        this.AddToGroup("lockstep")
+//        this.SetProcess false
+    
+    interface Lockstepper with
+        member this._Lockstep delta =
+            
+            elapsed <- elapsed + delta
+            GD.Print (elapsed, " Delta received; ", delta)
+            this.velocity <- 
+                if elapsed >= duration.Value 
+                then
+                    GD.Print "Should stop"
+                    Vector2.Zero 
+                else 
+                    let coll = this.MoveAndCollide(this.velocity * this.speed * delta * flying_curve.Interpolate(elapsed/duration.Value))
+                    if not (coll = null)
+                    then 
+                        impact_sound.Value.Play'()
+                        this.velocity.Bounce(coll.Normal)
+                    else
+                        this.velocity
+
+            if this.can_pick_up() then do area.Value.SetDeferred("monitorable", true)
+    
+    override this._Process delta =
+        sprite.Value.Rotate <| if elapsed < duration.Value then Mathf.Deg2Rad(rot_speed.Value) * delta * flying_curve.Interpolate(elapsed/duration.Value) else 0.0f
         let s1 = disappearing_sprite.Value.Instance() :?> Sprite
         s1.Texture <- sprite.Value.Texture
         s1.Position <- this.Position
         s1.Rotation <- sprite.Value.Rotation
         s1.ZIndex <- -1
         this.GetParent().AddChild(s1)
-
-        if this.can_pick_up() then do area.Value.SetDeferred("monitorable", true)
+        
+        ()
+        
     member this._on_Area2D_area_entered(area: Area2D)=
         if area.GetParent().HasMethod("slice") && not (this.can_pick_up()) then do area.GetParent().Call("slice") |> ignore
 

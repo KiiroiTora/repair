@@ -58,6 +58,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Scripts\Arena1.cs" />
     <Compile Include="Scripts\Client.cs" />
     <Compile Include="Scripts\FlyingObject.cs" />
     <Compile Include="Scripts\Player.cs" />

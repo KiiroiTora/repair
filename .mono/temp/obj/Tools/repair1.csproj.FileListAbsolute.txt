@@ -86,3 +86,6 @@ D:/Programe/rekless_client/repair/.mono/temp/obj/Tools/repair1.csproj.CopyComple
 /home/vankata/Documents/Godot/reckless_multiplayer/client/.mono/temp/bin/Tools/tr/FSharp.Core.resources.dll
 /home/vankata/Documents/Godot/reckless_multiplayer/client/.mono/temp/bin/Tools/pt-BR/FSharp.Core.resources.dll
 /home/vankata/Documents/Godot/reckless_multiplayer/client/.mono/temp/obj/Tools/repair1.csproj.CopyComplete
+/home/vankata/Documents/Godot/reckless_multiplayer/client/.mono/temp/bin/Tools/FSharpx.Collections.dll
+/home/vankata/Documents/Godot/reckless_multiplayer/client/.mono/temp/bin/Tools/FSharpx.Collections.pdb
+/home/vankata/Documents/Godot/reckless_multiplayer/client/.mono/temp/bin/Tools/FSharpx.Collections.xml

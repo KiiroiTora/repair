@@ -44,6 +44,10 @@
           <HintPath>..\packages\FSharpPlus.1.1.0-RC2\lib\net45\FSharpPlus.dll</HintPath>
           <Private>True</Private>
         </Reference>
+        <Reference Include="FSharpx.Collections, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
+          <HintPath>..\packages\FSharpx.Collections.2.1.2\lib\net45\FSharpx.Collections.dll</HintPath>
+          <Private>True</Private>
+        </Reference>
         <Reference Include="GodotSharp, Version=1.0.7333.4671, Culture=neutral, PublicKeyToken=null">
           <HintPath>..\.mono\assemblies\Debug\GodotSharp.dll</HintPath>
         </Reference>

@@ -59,7 +59,6 @@ type PlayerFS() as this =
 //    let client_state : Inputs = 
     
     let sign x = if x >= 0.0f then 1.0f else -1.0f
-    let mouse_distance() = (this.GetGlobalMousePosition() - this.GlobalPosition).Length()
     
     
     
@@ -77,6 +76,7 @@ type PlayerFS() as this =
         is_charge_just_released = Input.IsActionJustPressed "charge1";
         is_run_pressed = Input.IsActionPressed "run1";
     }) with get, set
+    member this.mouse_distance() = (this.inputs.mouse_pos - this.GlobalPosition).Length()
     
     member this.controller_dir() = this.GlobalPosition.DirectionTo this.inputs.mouse_pos
     
@@ -86,13 +86,45 @@ type PlayerFS() as this =
         l_leg.Value.Texture <- ResourceLoader.Load("res://Images/Character V.3/P" + pid.ToString() + "/L_Leg.png")
         r_leg.Value.Texture <- ResourceLoader.Load("res://Images/Character V.3/P" + pid.ToString() + "/R_Leg.png")
         this.AddToGroup "lockstep"
-        this.SetProcess false
+//        this.SetProcess false
         ()
     
+    interface Lockstepper with
+        member this._Lockstep delta =
+            let is_charging = this.inputs.is_charge_pressed && (has_axe_l || has_axe_r)
+        
+            let is_charging_l = is_charging && has_axe_l
+            let is_charging_r = is_charging && has_axe_r && not has_axe_l
+            let is_running = this.inputs.is_run_pressed
+            let speed = ( if is_running then 2.5f else 1.0f ) *
+                        ( if  has_limb LL && has_limb RL
+                          then speed
+                          else (
+                                   if has_limb LL || has_limb RL
+                                   then speed / 2.0f
+                                   else speed / 4.0f
+                               )
+                          )
+            let speed = speed * (if (this.mouse_distance() > 50.f) then 1.0f else moving_curve.Value.Interpolate((acceleration_sign * (50.f - this.mouse_distance())) / 100.f + 0.5f) )
+            let acceleration = (speed - last_speed)/delta
+            acceleration_sign <- sign acceleration
+            last_speed <- speed
+
+    //        if (just_pressed "restart") then do this.GetTree().ReloadCurrentScene() |> ignore
+
+            for b_part in body_parts.Keys do body_parts.Item(b_part).Value.Visible <- has_limb b_part
+
+            if this.inputs.is_charge_just_released then do this.throw()
+
+            velocity <- if not is_charging then this.MoveAndSlide <| this.controller_dir() * speed else Vector2.Zero
+
+            throw_time <- if is_charging then Mathf.Clamp(throw_time + delta, 0.0f, max_throw_duration) else 0.0f
+
+            ()
+       
     override this._Process (delta) =
-        
         let is_charging = this.inputs.is_charge_pressed && (has_axe_l || has_axe_r)
-        
+    
         let is_charging_l = is_charging && has_axe_l
         let is_charging_r = is_charging && has_axe_r && not has_axe_l
         let is_running = this.inputs.is_run_pressed
@@ -105,22 +137,8 @@ type PlayerFS() as this =
                                else speed / 4.0f
                            )
                       )
-        let speed = speed * (if (mouse_distance() > 50.f) then 1.0f else moving_curve.Value.Interpolate((acceleration_sign * (50.f - mouse_distance())) / 100.f + 0.5f) )
-        let acceleration = (speed - last_speed)/delta
-        acceleration_sign <- sign acceleration
-        last_speed <- speed
-
-//        if (just_pressed "restart") then do this.GetTree().ReloadCurrentScene() |> ignore
-
-        for b_part in body_parts.Keys do body_parts.Item(b_part).Value.Visible <- has_limb b_part
-
-        if this.inputs.is_charge_just_released then do this.throw()
-
-        velocity <- if not is_charging then this.MoveAndSlide <| this.controller_dir() * speed else Vector2.Zero
+        let speed = speed * (if (this.mouse_distance() > 50.f) then 1.0f else moving_curve.Value.Interpolate((acceleration_sign * (50.f - this.mouse_distance())) / 100.f + 0.5f) )
         anim.Value.PlaybackSpeed <- acceleration_sign * ((4.0f* speed) / (2.5f * max_speed)) 
-
-        throw_time <- if is_charging then Mathf.Clamp(throw_time + delta, 0.0f, max_throw_duration) else 0.0f
-
         l_axe.Value.Animation <- if not is_charging_l then "default" else "charge"
         l_axe.Value.Frame <- if not is_charging_l then 0 else int ((throw_time / max_throw_duration) * 8.0f)
         l_axe.Value.Scale <- if not is_charging_l then Vector2.One else Vector2.One * ((throw_time / max_throw_duration) / 5.0f) + Vector2.One
@@ -131,7 +149,7 @@ type PlayerFS() as this =
 
         this.GetNode'<Sprite>("shadow").Value.Position <- Vector2(this.GetNode'<Sprite>("shadow").Value.Position.x , if List.contains LL limbs || List.contains RL limbs then 137.669f else 60.0f)
         
-        body.Value.XFlipDir <| velocity.x
+        body.Value.XFlipDir <| if Mathf.Abs(velocity.x) > 10.0f then velocity.x else 0.0f
 
         anim.Value.Play (if not is_charging then (if velocity.Length() = 0.0f then "idle" else "walk") else ("swing" + (if has_axe_l then "l" else "r")))
 
@@ -139,7 +157,9 @@ type PlayerFS() as this =
         if is_charging_r then do r_hand.Value.LookAt(this.controller_dir().Rotated(Mathf.Deg2Rad(-150.0f)) - r_hand.Value.GlobalPosition)
 
         l_axe.Value.Visible <- has_axe_l
-        r_axe.Value.Visible <- has_axe_r
+        r_axe.Value.Visible <- has_axe_r 
+        
+        ()
 
     member this.slice() = 
         if not (limbs.IsEmpty) then do

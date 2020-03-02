@@ -26,6 +26,7 @@
       </e>
       <e p="Scenes" t="Include" />
       <e p="Scripts" t="Include">
+        <e p="Arena1.cs" t="Include" />
         <e p="Client.cs" t="Include" />
         <e p="FlyingObject.cs" t="Include" />
         <e p="Player.cs" t="Include" />

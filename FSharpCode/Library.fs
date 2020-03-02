@@ -1,5 +1,6 @@
 ﻿namespace FSharpCode
 
+open System
 open System.Text
 open Godot
 open Newtonsoft.Json
@@ -39,6 +40,8 @@ module Exts =
     type Pickup() = 
       inherit KinematicBody2D()
       member val obj_type = H with get, set
+    type Lockstepper =
+        abstract member _Lockstep : float32 -> unit
     type Node with
         member this.GetNode'<'a when 'a :> Node>(path: string) =
             lazy (this.GetNode(new NodePath(path)) :?> 'a)
@@ -59,7 +62,7 @@ module Seq =
 
 
 type Inputs = {mouse_pos: Vector2; is_charge_pressed: bool; is_charge_just_released: bool; is_run_pressed: bool;}
-type ServerState = (Inputs list) * float32
+type ServerState = (Inputs list) * DateTime
 type Message =
     | ClientInputs of Inputs
     | ServerState of ServerState
@@ -68,17 +71,35 @@ type WebSocketClient'(url : string) as this=
     inherit WebSocketClient()
     
     do
-        this.ConnectToUrl url |> ignore
+//        this.ConnectToUrl url |> ignore
         this.Connect("connection_established", this, "on_connected") |> ignore
         this.Connect("data_received", this, "on_message") |> ignore
-    let mutable connected = false    
-    let _OnConnected = new Event<_>()
-    let _OnMessage   = new Event<Message>()
-    member val OnConnected = _OnConnected.Publish
-    member val OnMessage = _OnMessage.Publish
+        this.Connect("connection_closed", this, "on_connection_closed") |> ignore
+        this.Connect("connection_error", this, "on_disconnected") |> ignore
+        
+    
+    let _OnConnected          = new Event<_>()
+    let _OnMessage            = new Event<Message>()
+    let _OnConnectionClosed   = new Event<_>()
+    let _OnDisconnected       = new Event<_>()
+    
+    member val connected = false with set, get    
+    member val OnConnected           = _OnConnected.Publish
+    member val OnMessage             = _OnMessage.Publish
+    member val OnConnectionClosed    = _OnConnectionClosed.Publish
+    member val OnDisconnected        = _OnDisconnected.Publish
+    
     member this.on_connected(protocol: obj[]) =
-        connected <- true
+        this.connected <- true
         _OnConnected.Trigger()
     member this.on_message() = _OnMessage.Trigger(JsonConvert.DeserializeObject<Message>(Encoding.ASCII.GetString(this.GetPeer(1).GetPacket())))
-    member this.send (msg:Message) = if connected then do this.GetPeer(1).PutPacket(JsonConvert.SerializeObject(msg).ToAscii()) |> ignore
+    member this.on_connection_closed(was_clean_close: obj[]) =
+        this.connected <- false
+        _OnConnectionClosed.Trigger()
+    member this.on_disconnected() =
+        this.connected <- false
+        _OnDisconnected.Trigger()
+    
+    member this.connect () = this.ConnectToUrl url |> ignore
+    member this.send (msg:Message) = if this.connected then do this.GetPeer(1).PutPacket(JsonConvert.SerializeObject(msg).ToAscii()) |> ignore
 

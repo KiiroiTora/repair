@@ -18,20 +18,24 @@ type FlyingObjectFs() as this=
     let mutable elapsed = 0.0f
     
     override this._Ready() =
+        
         velocity <- Vector2(float32 <| GD.RandRange(-1.0, 1.0), float32 <| GD.RandRange(-1.0, 1.0)).Normalized() * (float32 <| GD.RandRange(600.0, 900.0))
+        this.AddToGroup "lockstep"
+//        this.SetProcess false
+    interface Lockstepper with
+        member this._Lockstep delta =
+            elapsed <- elapsed + delta
+            if (elapsed >= duration) then do
+                velocity <- Vector2.Zero
 
+            else
+                this.MoveAndCollide'(velocity*delta*flying_curve.Value.Interpolate(elapsed/duration)) |> ignore
+            area.Value.SetDeferred("monitorable", (velocity = Vector2.Zero)) 
+            
+            ()
     override this._Process (delta) =
-        elapsed <- elapsed + delta
-        if (elapsed >= duration) then do
-            velocity <- Vector2.Zero
-
-        else
-            monad {
-                let! coll = this.MoveAndCollide'(velocity*delta*flying_curve.Value.Interpolate(elapsed/duration))
-                sprite.Value.Rotate(Mathf.Deg2Rad(rot_speed) * delta * flying_curve.Value.Interpolate(elapsed/duration))
-            } |> ignore
-        area.Value.SetDeferred("monitorable", (velocity = Vector2.Zero)) 
-
+        sprite.Value.Rotate <| if elapsed< duration then Mathf.Deg2Rad(rot_speed) * delta * flying_curve.Value.Interpolate(elapsed/duration) else 0.0f
+        ()
 
 
 
