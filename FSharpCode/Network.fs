@@ -8,19 +8,19 @@ open FSharpPlus
 
 type ClientFs() =
     inherit Node2D()
-    let delay_latency = 2.0f
+    let delay_latency = 0.5f
     let mutable delay_latency_timer = 0.0f
     let mutable last_time = None
     let mutable inputs_queue = Queue.empty
     static member val ws = lazy (
         GD.Print "Connecting"
-        let ret = new WebSocketClient'("ws://172.17.0.1:8080/lobby")
+        let ret = new WebSocketClient'("ws://35.214.86.28:8080/lobby")
 //        let ret = new WebSocketClient'("ws://35.214.86.28:8080/lobby")
         ret
     )
     
     member this.locksteppers() = this.GetTree().GetNodesInGroup "lockstep" |> Seq.cast<Lockstepper> |> List.ofSeq
-    member this.players() = this.locksteppers() |> Seq.filter (fun x -> x :? PlayerFS) |> Seq.cast<PlayerFS>
+//    member this.players() = this.locksteppers() |> Seq.filter (fun x -> x :? PlayerFS) |> Seq.cast<PlayerFS>
     
     override this._Ready() =
         ClientFs.ws.Value.OnConnected.Add
@@ -59,7 +59,7 @@ type ClientFs() =
                 let dt = float32(dt.TotalMilliseconds)/1000.0f
                     
                 GD.Print("Delta sent: ", dt)
-                for (inp, p) in Seq.zip inps (ps) do
+                for (inp, p) in List.zip inps (ps) do
                     p.inputs <- inp
                 for l in ls do
                     l._Lockstep(dt)
@@ -69,4 +69,10 @@ type ClientFs() =
 type Arena1Fs() =
     inherit Node2D()
     override this._Ready() = ClientFs.ws.Value.connect()
+        
+        
+        
+        
+        
+        
         
