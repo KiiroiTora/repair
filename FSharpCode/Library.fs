@@ -73,7 +73,11 @@ type Message =
 type WebSocketClient'(url : string) as this=
     inherit WebSocketClient()
     
+//    let crypto = new Crypto()
+//    do
+//    let cert = crypto.GenerateSelfSignedCertificate
     do
+//        this.ke crypto.GenerateRsa(4096)
 //        this.ConnectToUrl url |> ignore
         this.Connect("connection_established", this, "on_connected") |> ignore
         this.Connect("data_received", this, "on_message") |> ignore
