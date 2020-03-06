@@ -81,10 +81,12 @@ type PlayerFS() as this =
     member this.controller_dir() = this.GlobalPosition.DirectionTo this.inputs.mouse_pos
     
     override this._Ready() =
-        body.Value.Texture <- ResourceLoader.Load("res://Images/Character V.3/P" + pid.ToString() + "/Torso.png")
-        head.Value.Texture <- ResourceLoader.Load("res://Images/Character V.3/P" + pid.ToString() + "/Head.png")
-        l_leg.Value.Texture <- ResourceLoader.Load("res://Images/Character V.3/P" + pid.ToString() + "/L_Leg.png")
-        r_leg.Value.Texture <- ResourceLoader.Load("res://Images/Character V.3/P" + pid.ToString() + "/R_Leg.png")
+        body.Value.Texture <- ResourceLoader.Load("res://Images/Character/P" + pid.ToString() + "/torso.png")
+        head.Value.Texture <- ResourceLoader.Load("res://Images/Character/P" + pid.ToString() + "/head.png")
+        l_hand.Value.Texture <- ResourceLoader.Load("res://Images/Character/P" + pid.ToString() + "/l_arm.png")
+        r_hand.Value.Texture <- ResourceLoader.Load("res://Images/Character/P" + pid.ToString() + "/r_arm.png")
+        l_leg.Value.Texture <- ResourceLoader.Load("res://Images/Character/P" + pid.ToString() + "/l_leg.png")
+        r_leg.Value.Texture <- ResourceLoader.Load("res://Images/Character/P" + pid.ToString() + "/r_leg.png")
         this.AddToGroup "lockstep"
 //        this.SetProcess false
         ()

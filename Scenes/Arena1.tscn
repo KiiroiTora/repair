@@ -1,9 +1,9 @@
 [gd_scene load_steps=15 format=2]
 
 [ext_resource path="res://Scenes/Player.tscn" type="PackedScene" id=1]
-[ext_resource path="res://Images/Arena V.2/Legend Statue Shadow.png" type="Texture" id=2]
-[ext_resource path="res://Images/Arena V.2/Arena.png" type="Texture" id=3]
-[ext_resource path="res://Images/Arena V.2/Berserker statue shadow.png" type="Texture" id=4]
+[ext_resource path="res://Images/Arena/Legend Statue Shadow.png" type="Texture" id=2]
+[ext_resource path="res://Images/Arena/Arena.png" type="Texture" id=3]
+[ext_resource path="res://Images/Arena/Berserker statue shadow.png" type="Texture" id=4]
 [ext_resource path="res://Images/Split statues/LS Bottom.png" type="Texture" id=5]
 [ext_resource path="res://Images/Split statues/BS Bottom.png" type="Texture" id=6]
 [ext_resource path="res://Images/Split statues/BS Top.png" type="Texture" id=7]
@@ -32,6 +32,7 @@ z_index = 2
 [node name="Player2" parent="." instance=ExtResource( 1 )]
 position = Vector2( 1756.2, 888.314 )
 z_index = 1
+pid = 2
 
 [node name="TopWall" type="StaticBody2D" parent="."]
 position = Vector2( 924.037, 0 )
