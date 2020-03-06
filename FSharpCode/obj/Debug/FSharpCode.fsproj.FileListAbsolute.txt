@@ -67,7 +67,6 @@ D:/Programe/rekless_client/repair/FSharpCode/obj/Debug/FSharpCode.pdb
 /home/vankata/Documents/Godot/reckless_multiplayer/client/FSharpCode/bin/Debug/FSharp.Core.dll
 /home/vankata/Documents/Godot/reckless_multiplayer/client/FSharpCode/bin/Debug/FSharp.Data.dll
 /home/vankata/Documents/Godot/reckless_multiplayer/client/FSharpCode/bin/Debug/FSharpPlus.dll
-/home/vankata/Documents/Godot/reckless_multiplayer/client/FSharpCode/bin/Debug/GodotSharp.dll
 /home/vankata/Documents/Godot/reckless_multiplayer/client/FSharpCode/bin/Debug/Newtonsoft.Json.dll
 /home/vankata/Documents/Godot/reckless_multiplayer/client/FSharpCode/bin/Debug/System.ValueTuple.dll
 /home/vankata/Documents/Godot/reckless_multiplayer/client/FSharpCode/bin/Debug/websocket-sharp.dll

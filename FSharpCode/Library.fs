@@ -66,7 +66,10 @@ type ServerState = (Inputs list) * DateTime
 type Message =
     | ClientInputs of Inputs
     | ServerState of ServerState
-
+    | JoinRequest of int
+    | InQueue of int * int
+    | GameReady
+    
 type WebSocketClient'(url : string) as this=
     inherit WebSocketClient()
     

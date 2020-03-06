@@ -47,7 +47,7 @@ type ClientFs() =
                         is_charge_just_released = Input.IsActionJustReleased "throw1";
                         is_run_pressed = Input.IsActionPressed "run1";
                     })
-        GD.Print inputs_queue.Length
+//        GD.Print inputs_queue.Length
         ClientFs.ws.Value.send <| to_send
         if delay_latency_timer > delay_latency then do
             monad{
