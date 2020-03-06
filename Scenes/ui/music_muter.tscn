@@ -1,0 +1,18 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://Images/UI/note.png" type="Texture" id=1]
+[ext_resource path="res://Images/UI/muted.png" type="Texture" id=2]
+[ext_resource path="res://Scripts/ui/music_muter.gd" type="Script" id=3]
+
+[node name="music" type="TextureButton"]
+margin_left = 1721.07
+margin_top = 51.8173
+margin_right = 1761.07
+margin_bottom = 91.8173
+toggle_mode = true
+texture_normal = ExtResource( 1 )
+texture_pressed = ExtResource( 2 )
+script = ExtResource( 3 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
