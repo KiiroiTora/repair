@@ -73,6 +73,7 @@ and ServerFs() =
     static member val ws = lazy (
         let ret = new WebSocketServer(8080)
         ret.AddWebSocketService<Lobby>("/lobby")
+        ret.SslConfiguration.ClientCertificateRequired <- false
         
         ret.Start()
         GD.Print("Server started")
