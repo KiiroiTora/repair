@@ -1,5 +1,7 @@
 module FSharpCode.Network
 open System
+open System.Security.Cryptography.X509Certificates
+
 open Godot
 open WebSocketSharp.Server
 open FSharpx.Collections
@@ -71,10 +73,10 @@ and LobbyFs() =
 and ServerFs() =
     inherit Node()
     static member val ws = lazy (
-        let ret = new WebSocketServer(8080)
+        let ret = new WebSocketServer(8080, true)
         ret.AddWebSocketService<Lobby>("/lobby")
-        ret.SslConfiguration.ClientCertificateRequired <- false
-        
+        ret.SslConfiguration.ServerCertificate <- X509Certificate2("/certificate.pfx")
+        GD.Print ret.SslConfiguration.ServerCertificate
         ret.Start()
         GD.Print("Server started")
         ret
